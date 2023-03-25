@@ -1,4 +1,4 @@
-name: terraform-plan
+name: Terraform
 run-name: ${{ github.actor }} is learning GitHub Actions
 on:
   push:
