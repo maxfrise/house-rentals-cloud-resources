@@ -32,3 +32,11 @@ module "sayHi_bucket" {
     MaxfriseAPI = "true"
   }
 }
+
+module "sample_lambda" {
+  source = "./modules/lambdaexample"
+
+  building_path        = "./modules/lambdaexample/src/dist"
+  lambda_code_filename = "index.zip"
+  lambda_src_path      = "./modules/lambdaexample/src"
+}
