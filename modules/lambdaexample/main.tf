@@ -10,7 +10,7 @@ resource "aws_lambda_function" "hello-terraform" {
   ]
 }
 
-resource "null_resource" "lambda_code_change_check" {
+resource "null_resource" "build_lambda_function" {
     triggers = {
         build_number = "${timestamp()}" # TODO: this should be the sha of the code.
     }
