@@ -20,3 +20,15 @@ terraform {
 provider "aws" {
   region = "us-west-2"
 }
+
+module "sayHi_bucket" {
+  source = "./modules/sayhi"
+
+  bucket_name = "testing_submodules"
+
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+    MaxfriseAPI = "true"
+  }
+}
