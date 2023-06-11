@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "hello-terraform" {
   filename      = "${var.building_path}/${var.lambda_code_filename}"
   handler       = "index.handler"
-  runtime       = "Node.js 18.x"
+  runtime       = "nodejs18.x"
   function_name = "hello-terraform"
   role          = aws_iam_role.iam_for_lambda.arn
   timeout       = 30
