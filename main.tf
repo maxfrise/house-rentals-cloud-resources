@@ -24,7 +24,7 @@ provider "aws" {
 module "sayHi_bucket" {
   source = "./modules/sayhi"
 
-  bucket_name = "testing_submodules"
+  bucket_name = "testing-submodules-resources"
 
   tags = {
     Terraform   = "true"
