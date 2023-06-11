@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "hello-terraform" {
-  filename      = "${local.building_path}/${local.lambda_code_filename}"
+  filename      = "${var.building_path}/${var.lambda_code_filename}"
   handler       = "index.handler"
   runtime       = "Node.js 18.x"
   function_name = "hello-terraform"
