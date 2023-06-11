@@ -1,5 +1,5 @@
 name: Terraform
-run-name: ${{ github.actor }} is deploying could resources
+run-name: ${{ github.actor }} is deploying cloud resources
 on:
   push:
     branches:
