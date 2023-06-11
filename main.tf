@@ -21,8 +21,8 @@ provider "aws" {
   region = "us-west-2"
 }
 
-module "sayHi_bucket" {
-  source = "./modules/sayhi"
+module "s3_bucket" {
+  source = "./modules/s3bucket"
 
   bucket_name = "testing-submodules-resources"
 

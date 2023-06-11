@@ -1,9 +1,9 @@
-output "sayhi_bucket_arn" {
+output "s3bucket_arn" {
   description = "ARN of the bucket"
-  value       = module.sayHi_bucket.arn
+  value       = module.s3_bucket.arn
 }
 
-output "sayhi_bucket_name" {
+output "s3bucket_name" {
   description = "Name (id) of the bucket"
-  value       = module.sayHi_bucket.name
+  value       = module.s3_bucket.name
 }
