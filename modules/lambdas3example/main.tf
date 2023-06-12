@@ -14,7 +14,7 @@ resource "aws_lambda_function" "lamba_s3_example" {
   function_name    = "lambdaS3Example"
   description      = "Example of a lambda where the code lives on s3"
   s3_bucket        = var.bucket
-  s3_key           = aws_s3_bucket_object.file_upload.key
+  s3_key           = aws_s3_object.file_upload.key
   runtime          = "nodejs18.x"
   role             = aws_iam_role.iam_for_lambda.arn
   source_code_hash = base64sha256(data.archive_file.source.output_path)
