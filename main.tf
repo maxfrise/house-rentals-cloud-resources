@@ -40,3 +40,11 @@ module "sample_lambda" {
   lambda_code_filename = "index.zip"
   lambda_src_path      = "./modules/lambdaexample/src"
 }
+
+module "sample_s3_lambda" {
+  source = "./modules/lambdas3example"
+
+  building_path      = "./modules/lambdaexample/src/dist"
+  lambda_output_path = "./modules/lambdaexample/src/dist/lambda.zip"
+  s3_suffix          = "lambas3example"
+}
