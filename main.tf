@@ -46,6 +46,6 @@ module "sample_s3_lambda" {
 
   building_path      = "./modules/lambdaexample/src/dist"
   lambda_output_path = "./modules/lambdaexample/src/dist/lambda.zip"
-  bucket             = "lambdaresources"
+  bucket             = "maxfriselambdaresources"
   s3_suffix          = "lambas3example"
 }
