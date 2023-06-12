@@ -4,7 +4,7 @@ data "archive_file" "source" {
   output_path = var.lambda_output_path
 }
 
-resource "aws_s3_bucket_object" "file_upload" {
+resource "aws_s3_object" "file_upload" {
   bucket = var.bucket
   key    = var.lambda_output_path
   source = data.archive_file.source.output_path
@@ -24,7 +24,7 @@ resource "aws_lambda_function" "lamba_s3_example" {
 }
 
 resource "aws_iam_role" "iam_for_lambda" {
-  name = "iam_for_lambda"
+  name = "iam_lambda_s3"
 
   assume_role_policy = <<EOF
     {
