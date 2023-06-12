@@ -6,7 +6,7 @@ data "archive_file" "source" {
 
 resource "aws_s3_object" "file_upload" {
   bucket = var.bucket
-  key    = var.lambda_output_path
+  key    = var.bucketKey
   source = data.archive_file.source.output_path
 }
 

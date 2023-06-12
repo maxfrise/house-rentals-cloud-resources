@@ -17,3 +17,8 @@ variable "bucket" {
   description = "The name of the bucket where the code will be deployed"
   type        = string
 }
+
+variable "bucketKey" {
+  description = "The name of the file where the lambda code exisits"
+  type        = string
+}
