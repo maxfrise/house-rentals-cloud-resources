@@ -50,3 +50,7 @@ module "sample_s3_lambda" {
   s3_suffix          = "lambas3example"
   bucketKey          = "sample_s3_lambda.zip"
 }
+
+module "sample_dynamodb_table" {
+  source = "./modules/dynamodbtableexample"
+}
