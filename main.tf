@@ -44,9 +44,9 @@ module "sample_lambda" {
 module "sample_s3_lambda" {
   source = "./modules/lambdas3example"
 
-  building_path      = "./modules/lambdaexample/src/dist"
-  lambda_output_path = "./modules/lambdaexample/src/dist/lambda.zip"
+  source_file        = "./modules/lambdas3example/src/dist/index.js"
+  lambda_output_path = "./modules/lambdas3example/src/dist/lambda.zip"
   bucket             = "maxfrisedeployables"
   s3_suffix          = "lambas3example"
-  bucketKey          = "sample_s3_lambda_lambda.zip"
+  bucketKey          = "sample_s3_lambda.zip"
 }
