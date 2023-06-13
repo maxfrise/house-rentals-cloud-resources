@@ -1,8 +1,10 @@
 resource "aws_dynamodb_table" "tf_example_table" {
-  name         = "tf-test-table"
-  billing_mode = "PROVISIONED"
-  hash_key     = "houses"
-  range_key    = "date"
+  name           = "tf-test-table"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 1
+  write_capacity = 1
+  hash_key       = "houses"
+  range_key      = "date"
 
   attribute {
     name = "houses"
@@ -25,9 +27,9 @@ resource "aws_dynamodb_table" "tf_example_table" {
   }
 
   global_secondary_index {
-    name      = "UserType"
+    name            = "UserType"
     projection_type = "ALL"
-    hash_key  = "user"
-    range_key = "type"
+    hash_key        = "user"
+    range_key       = "type"
   }
 }
