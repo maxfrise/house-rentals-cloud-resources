@@ -26,6 +26,7 @@ resource "aws_dynamodb_table" "tf_example_table" {
 
   global_secondary_index {
     name      = "UserType"
+    projection_type = "ALL"
     hash_key  = "user"
     range_key = "type"
   }
