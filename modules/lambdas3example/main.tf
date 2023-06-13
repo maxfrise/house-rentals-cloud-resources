@@ -8,6 +8,7 @@ resource "aws_s3_object" "file_upload" {
   bucket = var.bucket
   key    = var.bucketKey
   source = data.archive_file.source.output_path
+  etag = filemd5(data.archive_file.source.source_file)
 }
 
 resource "aws_lambda_function" "lamba_s3_example" {
@@ -19,7 +20,7 @@ resource "aws_lambda_function" "lamba_s3_example" {
   role             = aws_iam_role.iam_for_lambda.arn
   source_code_hash = base64sha256(data.archive_file.source.output_path)
   handler          = "index.handler"
-  architectures    = ["x86_64"]
+  architectures    = ["arm64"]
   timeout          = 900
 }
 

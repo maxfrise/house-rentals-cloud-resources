@@ -1,20 +1,12 @@
 resource "aws_lambda_function" "hello-terraform" {
-  filename      = "${var.building_path}/${var.lambda_code_filename}"
-  handler       = "index.handler"
-  runtime       = "nodejs18.x"
-  function_name = "hello-terraform"
-  architectures = ["arm64"]
-  role          = aws_iam_role.iam_for_lambda.arn
-  timeout       = 30
-  depends_on = [
-    null_resource.build_lambda_function
-  ]
-}
-
-resource "null_resource" "build_lambda_function" {
-    triggers = {
-        build_number = "${timestamp()}" # TODO: this should be the sha of the code.
-    }
+  filename         = "${var.building_path}/${var.lambda_code_filename}"
+  handler          = "index.handler"
+  runtime          = "nodejs18.x"
+  function_name    = "hello-terraform"
+  architectures    = ["arm64"]
+  role             = aws_iam_role.iam_for_lambda.arn
+  timeout          = 30
+  source_code_hash = filebase64sha256("${var.building_path}/${var.lambda_code_filename}")
 }
 
 resource "aws_iam_role" "iam_for_lambda" {
