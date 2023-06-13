@@ -1,5 +1,5 @@
-variable "building_path" {
-  description = "The path of the build to find the lambda code"
+variable "source_file" {
+  description = "The of the zip file"
   type        = string
 }
 
