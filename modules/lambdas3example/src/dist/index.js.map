@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["../index.ts"],
-  "sourcesContent": ["import { Handler } from 'aws-lambda';\nimport { Event } from './event';\n\nexport const handler: Handler = async (event: Event) => {\n    console.log('EVENT: \\n' + JSON.stringify(event, null, 2));\n    console.log('new log added')\n    return {\n        statusCode: 200,\n        body: JSON.stringify({\n            message: { house: event.houseid, tenant: event.tenanantName },\n        }),\n    };\n};\n"],
-  "mappings": "yaAAA,IAAAA,EAAA,GAAAC,EAAAD,EAAA,aAAAE,IAAA,eAAAC,EAAAH,GAGO,IAAME,EAAmB,MAAOE,IACnC,QAAQ,IAAI;AAAA,EAAc,KAAK,UAAUA,EAAO,KAAM,CAAC,CAAC,EACxD,QAAQ,IAAI,eAAe,EACpB,CACH,WAAY,IACZ,KAAM,KAAK,UAAU,CACjB,QAAS,CAAE,MAAOA,EAAM,QAAS,OAAQA,EAAM,YAAa,CAChE,CAAC,CACL",
+  "sourcesContent": ["import { Handler } from 'aws-lambda';\nimport { Event } from './event';\n\nexport const handler: Handler = async (event: Event) => {\n    console.log('EVENT: \\n' + JSON.stringify(event, null, 2));\n    console.log('new log added')\n    return {\n        statusCode: 200,\n        body: JSON.stringify({\n            message: { house: event.houseid, tenant: event.tenanantName, updated: 'yes' },\n        }),\n    };\n};\n"],
+  "mappings": "yaAAA,IAAAA,EAAA,GAAAC,EAAAD,EAAA,aAAAE,IAAA,eAAAC,EAAAH,GAGO,IAAME,EAAmB,MAAOE,IACnC,QAAQ,IAAI;AAAA,EAAc,KAAK,UAAUA,EAAO,KAAM,CAAC,CAAC,EACxD,QAAQ,IAAI,eAAe,EACpB,CACH,WAAY,IACZ,KAAM,KAAK,UAAU,CACjB,QAAS,CAAE,MAAOA,EAAM,QAAS,OAAQA,EAAM,aAAc,QAAS,KAAM,CAChF,CAAC,CACL",
   "names": ["src_exports", "__export", "handler", "__toCommonJS", "event"]
 }

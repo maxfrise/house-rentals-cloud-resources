@@ -8,6 +8,7 @@ resource "aws_s3_object" "file_upload" {
   bucket = var.bucket
   key    = var.bucketKey
   source = data.archive_file.source.output_path
+  etag = filemd5(data.archive_file.source.source_file)
 }
 
 resource "aws_lambda_function" "lamba_s3_example" {

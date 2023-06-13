@@ -7,7 +7,7 @@ export const handler: Handler = async (event: Event) => {
     return {
         statusCode: 200,
         body: JSON.stringify({
-            message: { house: event.houseid, tenant: event.tenanantName },
+            message: { house: event.houseid, tenant: event.tenanantName, updated: 'yes' },
         }),
     };
 };
