@@ -1,8 +1,8 @@
 resource "aws_dynamodb_table" "tf_example_table" {
   name           = "tf-test-table"
   billing_mode   = "PROVISIONED"
-  read_capacity  = 1
-  write_capacity = 1
+  read_capacity  = 2
+  write_capacity = 2
   hash_key       = "houses"
   range_key      = "date"
 
