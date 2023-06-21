@@ -7,8 +7,8 @@ data "archive_file" "function_archive" {
 resource "aws_s3_object" "file_upload" {
   bucket = var.bucket
   key    = var.bucketKey
-  source = data.archive_file.source.output_path
-  etag   = filemd5(data.archive_file.source.source_file)
+  source = data.archive_file.function_archive.output_path
+  etag   = filemd5(data.archive_file.function_archive.source_file)
 }
 
 resource "aws_lambda_function" "lamba_apigateway_example" {
@@ -18,7 +18,7 @@ resource "aws_lambda_function" "lamba_apigateway_example" {
   s3_key           = aws_s3_object.file_upload.key
   runtime          = "nodejs18.x"
   role             = aws_iam_role.lambda_role.arn
-  source_code_hash = base64sha256(data.archive_file.source.output_path)
+  source_code_hash = base64sha256(data.archive_file.function_archive.output_path)
   handler          = "index.handler"
   architectures    = ["arm64"]
   timeout          = 900
