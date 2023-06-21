@@ -17,7 +17,7 @@ resource "aws_lambda_function" "lamba_apigateway_example" {
   s3_bucket        = var.bucket
   s3_key           = aws_s3_object.file_upload.key
   runtime          = "nodejs18.x"
-  role             = aws_iam_role.lambda_role.arn
+  role             = aws_iam_role.iam_for_lambda_apigw.arn
   source_code_hash = base64sha256(data.archive_file.function_archive.output_path)
   handler          = "index.handler"
   architectures    = ["arm64"]
@@ -38,7 +38,7 @@ resource "aws_lambda_permission" "lambda" {
   source_arn    = "${aws_api_gateway_rest_api.api_gateway_rest_api.execution_arn}/*/*"
 }
 
-resource "aws_iam_role" "iam_for_lambda" {
+resource "aws_iam_role" "iam_for_lambda_apigw" {
   name = "iam_lambda_apigw"
 
   assume_role_policy = <<EOF
