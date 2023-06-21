@@ -54,3 +54,8 @@ module "sample_s3_lambda" {
 module "sample_dynamodb_table" {
   source = "./modules/dynamodbtableexample"
 }
+
+
+module "sample_api_gateway" {
+  source = "./modules/apigatewayexamaple"
+}
