@@ -54,3 +54,14 @@ module "sample_s3_lambda" {
 module "sample_dynamodb_table" {
   source = "./modules/dynamodbtableexample"
 }
+
+
+module "sample_api_gateway" {
+  source = "./modules/apigatewayexamaple"
+
+  source_file        = "./modules/apigatewayexamaple/src/dist/index.js"
+  lambda_output_path = "./modules/apigatewayexamaple/src/dist/lambda.zip"
+  bucket             = "maxfrisedeployables"
+  bucketKey          = "tf-lambda-apigw-sample.zip"
+  example_secret     = "this_is_a_secrete"
+}
