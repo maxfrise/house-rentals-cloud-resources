@@ -8,11 +8,6 @@ variable "lambda_output_path" {
   type        = string
 }
 
-variable "s3_suffix" {
-  description = "Sufix of the bucket where the code is deployed"
-  type        = string
-}
-
 variable "bucket" {
   description = "The name of the bucket where the code will be deployed"
   type        = string
