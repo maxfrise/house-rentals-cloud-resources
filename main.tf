@@ -21,6 +21,14 @@ provider "aws" {
   region = "us-west-2"
 }
 
+module "agencies" {
+  source = "./modules/agencieslambda"
+
+  building_path        = "./modules/agencieslambda/src/dist"
+  lambda_code_filename = "index.zip"
+  lambda_src_path      = "./modules/agencieslambda/src"
+}
+
 module "s3_bucket" {
   source = "./modules/s3bucket"
 
