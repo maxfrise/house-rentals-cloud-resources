@@ -1,5 +1,3 @@
-build types
+# Agencies Lambda
 
-```bash
-npx quicktype event.json -o event.ts
-```
+This lambda is used to create / update or remove agencies from the database and the access to this lambda is exposed by the `agencies-api` resource from the api gateway.
