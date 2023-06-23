@@ -1,0 +1,23 @@
+{
+  "name": "agencies-lambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "prebuild": "rm -rf dist",
+    "build": "esbuild index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
+    "postbuild": "cd dist && zip -r index.zip index.js* && rm -rf index.js index.js.map"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.117",
+    "@types/node": "^20.3.1",
+    "aws-lambda": "^1.0.7",
+    "esbuild": "^0.18.0",
+    "vitest": "^0.32.2"
+  }
+}
