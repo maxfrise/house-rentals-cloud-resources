@@ -31,9 +31,13 @@ resource "aws_api_gateway_integration" "agencies_lambda_integration" {
 }
 
 resource "aws_api_gateway_deployment" "test_deployment" {
-  depends_on = [
-    aws_api_gateway_integration.agencies_lambda_integration
-  ]
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.agency_resource,
+      aws_api_gateway_method.agency_resource_method,
+      aws_api_gateway_integration.agencies_lambda_integration,
+    ]))
+  }
 
   rest_api_id = aws_api_gateway_rest_api.agencies_api.id
 
@@ -43,9 +47,13 @@ resource "aws_api_gateway_deployment" "test_deployment" {
 }
 
 resource "aws_api_gateway_deployment" "prod_deployment" {
-  depends_on = [
-    aws_api_gateway_integration.agencies_lambda_integration
-  ]
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.agency_resource,
+      aws_api_gateway_method.agency_resource_method,
+      aws_api_gateway_integration.agencies_lambda_integration,
+    ]))
+  }
 
   rest_api_id = aws_api_gateway_rest_api.agencies_api.id
 
