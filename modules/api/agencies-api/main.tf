@@ -75,6 +75,14 @@ resource "aws_api_gateway_stage" "prod" {
 }
 
 ### LAMBDA Function
+resource "aws_lambda_permission" "agencies_api_lambda_permission" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.agencies.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_api_gateway_rest_api.agencies_api.execution_arn}/*"
+}
 
 resource "aws_lambda_function" "agencies" {
   filename         = "${var.building_path}/${var.lambda_code_filename}"
