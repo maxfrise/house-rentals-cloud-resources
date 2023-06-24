@@ -12,26 +12,6 @@ resource "aws_dynamodb_table" "agencies_test" {
   }
 
   attribute {
-    name = "address"
-    type = "S"
-  }
-
-  attribute {
-    name = "name"
-    type = "S"
-  }
-
-  attribute {
-    name = "phone"
-    type = "S"
-  }
-
-  attribute {
-    name = "mail"
-    type = "S"
-  }
-
-  attribute {
     name = "owner"
     type = "S"
   }
