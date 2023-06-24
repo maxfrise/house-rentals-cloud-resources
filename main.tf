@@ -29,6 +29,14 @@ module "agencies" {
   lambda_src_path      = "./modules/agencieslambda/src"
 }
 
+module "dynamoDB_agencies_test_table" {
+  source = "./modules/database/agencies-test-table"
+}
+
+module "dynamoDB_agencies_prod_table" {
+  source = "./modules/database/agencies-prod-table"
+}
+
 module "s3_bucket" {
   source = "./modules/s3bucket"
 
