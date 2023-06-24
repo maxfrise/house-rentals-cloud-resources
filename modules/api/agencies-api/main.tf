@@ -1,5 +1,5 @@
 module "agencies_lambda" {
-  source = "../modules/agencieslambda"
+  source = "../../agencieslambda"
 
   building_path        = "./modules/agencieslambda/src/dist"
   lambda_code_filename = "index.zip"
