@@ -21,12 +21,8 @@ provider "aws" {
   region = "us-west-2"
 }
 
-module "agencies" {
-  source = "./modules/agencieslambda"
-
-  building_path        = "./modules/agencieslambda/src/dist"
-  lambda_code_filename = "index.zip"
-  lambda_src_path      = "./modules/agencieslambda/src"
+module "agencies_api_gateway" {
+  source = "./modules/api/agencies-api"
 }
 
 module "dynamoDB_agencies_test_table" {
@@ -80,8 +76,4 @@ module "sample_api_gateway" {
   bucket             = "maxfrisedeployables"
   bucketKey          = "tf-lambda-apigw-sample.zip"
   example_secret     = "this_is_a_secrete"
-}
-
-module "agencies_api_gateway" {
-  source = "./modules/api/agencies-api"
 }

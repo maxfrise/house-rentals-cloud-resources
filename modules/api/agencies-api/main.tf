@@ -1,3 +1,11 @@
+module "agencies_lambda" {
+  source = "../modules/agencieslambda"
+
+  building_path        = "./modules/agencieslambda/src/dist"
+  lambda_code_filename = "index.zip"
+  lambda_src_path      = "./modules/agencieslambda/src"
+}
+
 resource "aws_api_gateway_rest_api" "agencies_api" {
   name        = "agencies_api"
   description = "Api Gateway for agencies management"
@@ -31,7 +39,7 @@ resource "aws_api_gateway_deployment" "test_deployment" {
     aws_api_gateway_integration.agencies_lambda_integration
   ]
 
-  rest_api_id = aws_api_gateway_rest_api.api_gateway_rest_api.id
+  rest_api_id = aws_api_gateway_rest_api.agencies_api.id
   stage_name  = "test"
 
   variables = {
@@ -44,7 +52,7 @@ resource "aws_api_gateway_deployment" "prod_deployment" {
     aws_api_gateway_integration.agencies_lambda_integration
   ]
 
-  rest_api_id = aws_api_gateway_rest_api.api_gateway_rest_api.id
+  rest_api_id = aws_api_gateway_rest_api.agencies_api.id
   stage_name  = "prod"
 
   variables = {
