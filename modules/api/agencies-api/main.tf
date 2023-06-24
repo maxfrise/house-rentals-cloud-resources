@@ -37,10 +37,6 @@ resource "aws_api_gateway_deployment" "test_deployment" {
 
   rest_api_id = aws_api_gateway_rest_api.agencies_api.id
 
-  variables = {
-    "environment" = "test"
-  }
-
   lifecycle {
     create_before_destroy = true
   }
@@ -53,10 +49,6 @@ resource "aws_api_gateway_deployment" "prod_deployment" {
 
   rest_api_id = aws_api_gateway_rest_api.agencies_api.id
 
-  variables = {
-    "environment" = "prod"
-  }
-
   lifecycle {
     create_before_destroy = true
   }
@@ -66,12 +58,20 @@ resource "aws_api_gateway_stage" "test" {
   deployment_id = aws_api_gateway_deployment.test_deployment.id
   rest_api_id   = aws_api_gateway_rest_api.agencies_api.id
   stage_name    = "test"
+
+  variables = {
+    "environment" = "test"
+  }
 }
 
 resource "aws_api_gateway_stage" "prod" {
   deployment_id = aws_api_gateway_deployment.prod_deployment.id
   rest_api_id   = aws_api_gateway_rest_api.agencies_api.id
   stage_name    = "prod"
+
+  variables = {
+    "environment" = "prod"
+  }
 }
 
 ### LAMBDA Function
