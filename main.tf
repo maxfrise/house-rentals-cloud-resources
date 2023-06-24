@@ -81,3 +81,7 @@ module "sample_api_gateway" {
   bucketKey          = "tf-lambda-apigw-sample.zip"
   example_secret     = "this_is_a_secrete"
 }
+
+module "agencies_api_gateway" {
+  source = "./modules/api/agencies-api"
+}
