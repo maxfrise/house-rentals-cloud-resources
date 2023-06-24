@@ -21,12 +21,12 @@ provider "aws" {
   region = "us-west-2"
 }
 
-module "agencies" {
-  source = "./modules/agencieslambda"
+module "agencies_api_gateway" {
+  source = "./modules/api/agencies-api"
 
-  building_path        = "./modules/agencieslambda/src/dist"
+  building_path        = "./modules/api/agencies-api/lambda/dist"
   lambda_code_filename = "index.zip"
-  lambda_src_path      = "./modules/agencieslambda/src"
+  lambda_src_path      = "./modules/api/agencies-api/lambda/src"
 }
 
 module "dynamoDB_agencies_test_table" {
