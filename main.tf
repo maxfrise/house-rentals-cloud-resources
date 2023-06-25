@@ -29,6 +29,10 @@ module "agencies_api_gateway" {
   lambda_src_path      = "./modules/api/agencies-api/lambda/src"
 }
 
+module "maxfrise_api_gateway" {
+  source = "./modules/api/maxfrise-api"
+}
+
 module "dynamoDB_agencies_test_table" {
   source = "./modules/database/agencies-test-table"
 }
