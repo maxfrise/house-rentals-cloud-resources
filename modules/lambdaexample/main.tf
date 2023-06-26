@@ -5,7 +5,7 @@ data "archive_file" "hello-terraform-src" {
 }
 
 resource "aws_lambda_function" "hello-terraform" {
-  filename         = data.archive_file.hello-terraform-src.source_file
+  filename         = data.archive_file.hello-terraform-src.output_path
   handler          = "index.handler"
   runtime          = "nodejs18.x"
   function_name    = "hello-terraform"
