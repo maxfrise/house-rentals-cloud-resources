@@ -1,7 +1,7 @@
 data "archive_file" "hello-terraform-src" {
   type        = "zip"
-  source_file = "./src/index.ts"
-  output_path = "./dist/index.zip"
+  source_file = "${var.lambda_src_file}"
+  output_path = "${var.building_path}/${var.lambda_code_filename}"
 }
 
 resource "aws_lambda_function" "hello-terraform" {
