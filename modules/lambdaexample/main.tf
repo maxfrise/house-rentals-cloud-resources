@@ -1,12 +1,18 @@
+data "archive_file" "hello-terraform-src" {
+  type        = "zip"
+  source_file = "./src/index.ts"
+  output_path = "./dist/index.zip"
+}
+
 resource "aws_lambda_function" "hello-terraform" {
-  filename         = "${var.building_path}/${var.lambda_code_filename}"
+  filename         = data.archive_file.hello-terraform-src.source_file
   handler          = "index.handler"
   runtime          = "nodejs18.x"
   function_name    = "hello-terraform"
   architectures    = ["arm64"]
   role             = aws_iam_role.iam_for_lambda.arn
   timeout          = 30
-  source_code_hash = filebase64sha256("${var.building_path}/${var.lambda_code_filename}")
+  source_code_hash = data.archive_file.hello-terraform-src.output_base64sha256
 }
 
 resource "aws_iam_role" "iam_for_lambda" {
