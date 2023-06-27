@@ -1,0 +1,28 @@
+{
+  "name": "house-rentals-cloud-resources",
+  "version": "1.0.0",
+  "description": "Cloud resources workspace",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf node_modules && rm -rf modules/**/node_modules",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxfrise/house-rentals-cloud-resources.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maxfrise/house-rentals-cloud-resources/issues"
+  },
+  "homepage": "https://github.com/maxfrise/house-rentals-cloud-resources#readme",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.117",
+    "@types/jest": "^29.5.2",
+    "@types/node": "^20.3.1",
+    "aws-lambda": "^1.0.7",
+    "esbuild": "^0.18.0",
+    "vitest": "^0.32.2"
+  }
+}

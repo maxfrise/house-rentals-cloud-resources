@@ -19,3 +19,5 @@ override.tf.json
 todos.md
 node_modules
 .DS_Store
+
+**/dist/*

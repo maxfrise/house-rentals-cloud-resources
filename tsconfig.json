@@ -14,7 +14,8 @@
     "moduleResolution": "node",
     "outDir": "dist",
     "types": [
-      "vitest/globals"
+      "vitest/globals",
+      "@types/jest"
     ],
     "resolveJsonModule": true
   }

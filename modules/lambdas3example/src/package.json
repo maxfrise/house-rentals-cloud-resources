@@ -1,20 +1,15 @@
 {
-  "name": "src",
+  "name": "@maxfrise-cloud/lambda-s3-example",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "vitest",
+    "test": "vitest run",
     "prebuild": "rm -rf dist",
     "build": "esbuild index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/aws-lambda": "^8.10.117",
-    "aws-lambda": "^1.0.7",
-    "esbuild": "^0.18.0",
-    "vitest": "^0.32.0"
-  }
+  "license": "ISC"
 }
