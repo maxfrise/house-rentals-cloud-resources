@@ -40,23 +40,3 @@ module "dynamoDB_agencies_test_table" {
 module "dynamoDB_agencies_prod_table" {
   source = "./terraform/database/agencies-prod-table"
 }
-
-module "s3_bucket" {
-  source = "./terraform/buckets/s3bucket"
-
-  bucket_name = "testing-submodules-resources"
-
-  tags = {
-    Terraform   = "true"
-    Environment = "dev"
-    MaxfriseAPI = "true"
-  }
-}
-
-module "sample_lambda" {
-  source = "./functions/lambdaexample"
-
-  building_path        = "./functions/lambdaexample/src/dist"
-  lambda_code_filename = "index.zip"
-  lambda_src_path      = "./functions/lambdaexample/src"
-}
