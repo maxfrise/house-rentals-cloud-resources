@@ -7,19 +7,11 @@ resource "aws_api_gateway_rest_api" "maxfrise_api" {
   }
 }
 
-
-// RESOURCES
-// ------------------------------ //
-
 resource "aws_api_gateway_resource" "agencies_resource" {
   rest_api_id = aws_api_gateway_rest_api.maxfrise_api.id
   parent_id   = aws_api_gateway_rest_api.maxfrise_api.root_resource_id
   path_part   = "agencies"
 }
-
-
-// METHODS
-// ------------------------------ //
 
 resource "aws_api_gateway_method" "agencies_resource_method" {
   rest_api_id   = aws_api_gateway_rest_api.maxfrise_api.id
@@ -27,10 +19,6 @@ resource "aws_api_gateway_method" "agencies_resource_method" {
   http_method   = "POST"
   authorization = "NONE"
 }
-
-
-// INTEGRATIONS
-// ------------------------------ //
 
 resource "aws_api_gateway_integration" "agencies_lambda_integration" {
   rest_api_id = aws_api_gateway_rest_api.maxfrise_api.id
@@ -41,9 +29,6 @@ resource "aws_api_gateway_integration" "agencies_lambda_integration" {
   type                    = "AWS_PROXY"
   uri                     = var.agencies_function_invoke_arn
 }
-
-// DEPLOYMENTS
-// ------------------------------ //
 
 resource "aws_api_gateway_deployment" "api_test_deployment" {
   triggers = {
@@ -77,9 +62,6 @@ resource "aws_api_gateway_deployment" "api_prod_deployment" {
   }
 }
 
-// STAGES 
-// ------------------------------ //
-
 resource "aws_api_gateway_stage" "test" {
   deployment_id = aws_api_gateway_deployment.api_test_deployment.id
   rest_api_id   = aws_api_gateway_rest_api.maxfrise_api.id
@@ -99,9 +81,6 @@ resource "aws_api_gateway_stage" "prod" {
     "environment" = "prod"
   }
 }
-
-// PERMISSIONS 
-// ------------------------------ //
 
 resource "aws_lambda_permission" "agencies_api_lambda_permission" {
   statement_id  = "AllowExecutionFromAPIGateway"
