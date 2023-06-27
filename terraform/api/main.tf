@@ -28,17 +28,23 @@ resource "aws_api_gateway_method" "agencies_resource_method" {
   authorization = "NONE"
 }
 
+resource "aws_api_gateway_method_response" "agencies_resource_method_response" {
+  rest_api_id = aws_api_gateway_rest_api.maxfrise_api.id
+  resource_id = aws_api_gateway_method.agencies_resource_method.resource_id
+  http_method = aws_api_gateway_method.agencies_resource_method.http_method
+  status_code = "200"
+}
 
 ## INTEGRATIONS ## 
 ## ------------------------------ ##
 
-resource "aws_api_gateway_integration" "agencies_lambda_integration" {
+resource "aws_api_gateway_integration" "agencies_lambda_integration_request" {
   rest_api_id = aws_api_gateway_rest_api.maxfrise_api.id
   resource_id = aws_api_gateway_method.agencies_resource_method.resource_id
   http_method = aws_api_gateway_method.agencies_resource_method.http_method
 
   integration_http_method = "POST"
-  type                    = "AWS_PROXY"
+  type                    = "AWS"
   uri                     = var.agencies_function_invoke_arn
 
   request_templates = {
@@ -46,6 +52,22 @@ resource "aws_api_gateway_integration" "agencies_lambda_integration" {
 {
   "body" : $input.json('$'),
   "environment": "$stageVariables.environment"
+}
+EOF
+  }
+}
+
+resource "aws_api_gateway_integration_response" "agencies_lambda_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.maxfrise_api.id
+  resource_id = aws_api_gateway_method.agencies_resource_method.resource_id
+  http_method = aws_api_gateway_method.agencies_resource_method.http_method
+  status_code = aws_api_gateway_method_response.agencies_resource_method_response.status_code
+
+  response_templates = {
+    "application/json" = <<EOF
+{
+  "body" : $input.json('$'),
+  "status": 200
 }
 EOF
   }
@@ -59,7 +81,8 @@ resource "aws_api_gateway_deployment" "api_test_deployment" {
     redeployment = sha1(jsonencode([
       aws_api_gateway_resource.agencies_resource,
       aws_api_gateway_method.agencies_resource_method,
-      aws_api_gateway_integration.agencies_lambda_integration,
+      aws_api_gateway_integration.agencies_lambda_integration_request,
+      aws_api_gateway_integration_response.agencies_lambda_integration_response
     ]))
   }
 
@@ -75,7 +98,8 @@ resource "aws_api_gateway_deployment" "api_prod_deployment" {
     redeployment = sha1(jsonencode([
       aws_api_gateway_resource.agencies_resource,
       aws_api_gateway_method.agencies_resource_method,
-      aws_api_gateway_integration.agencies_lambda_integration,
+      aws_api_gateway_integration.agencies_lambda_integration_request,
+      aws_api_gateway_integration_response.agencies_lambda_integration_response
     ]))
   }
 
