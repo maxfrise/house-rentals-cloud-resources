@@ -19,6 +19,9 @@
     ],
     "resolveJsonModule": true
   },
+  "include": [
+    "functions/**/*"
+  ],
   "exclude": [
     "node_modules"
   ]
