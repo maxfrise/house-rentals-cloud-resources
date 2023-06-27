@@ -32,3 +32,18 @@ module "dynamoDB_agencies_test_table" {
 module "dynamoDB_agencies_prod_table" {
   source = "./terraform/database/agencies-prod-table"
 }
+
+module "iam_maxfrise_lambdas" {
+  source = "./terraform/certs/lambdas"
+}
+
+module "agencies_lambda" {
+  source = "./terraform/lambdas/agencies"
+
+  iam_arn            = module.iam_maxfrise_lambdas.arn
+  source_file        = "./functions/agencies/dist/index.js"
+  lambda_output_path = "./functions/agencies/dist/lambda.zip"
+  bucket             = "maxfrisedeployables"
+  s3_suffix          = "agencies_lambda"
+  bucketKey          = "agencies_lambda.zip"
+}
