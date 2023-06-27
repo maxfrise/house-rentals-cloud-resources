@@ -1,4 +1,4 @@
-resource "aws_iam_role" "iam_for_maxfrise_lambdas" {
+resource "aws_iam_role" "iam_maxfrise_lambdas" {
   name = "iam_maxfrise_lambdas"
 
   assume_role_policy = <<EOF
