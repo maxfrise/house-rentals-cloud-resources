@@ -42,12 +42,12 @@ resource "aws_api_gateway_integration" "agencies_lambda_integration" {
   uri                     = var.agencies_function_invoke_arn
 
   request_templates = {
-    "application/xml" = <<EOF
-    {
-      "body" : $input.json('$'),
-      "environment": "$stageVariables.environment"
-    }
-    EOF
+    "application/json" = <<EOF
+{
+  "body" : $input.json('$'),
+  "environment": "$stageVariables.environment"
+}
+EOF
   }
 }
 
