@@ -38,7 +38,7 @@ resource "aws_api_gateway_integration" "agencies_lambda_integration" {
   http_method = aws_api_gateway_method.agencies_resource_method.http_method
 
   integration_http_method = "POST"
-  type                    = "AWS"
+  type                    = "AWS_PROXY"
   uri                     = var.agencies_function_invoke_arn
 
   request_templates = {
