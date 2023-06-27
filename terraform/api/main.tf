@@ -46,7 +46,7 @@ resource "aws_api_gateway_integration" "agencies_lambda_integration" {
 // ------------------------------ //
 
 resource "aws_api_gateway_deployment" "api_test_deployment" {
-  triggers = { // This needs to include everything that we want to trigger a new deployment after it changes
+  triggers = {
     redeployment = sha1(jsonencode([
       aws_api_gateway_resource.agencies_resource,
       aws_api_gateway_method.agencies_resource_method,
@@ -62,7 +62,7 @@ resource "aws_api_gateway_deployment" "api_test_deployment" {
 }
 
 resource "aws_api_gateway_deployment" "api_prod_deployment" {
-  triggers = { // This needs to include everything that we want to trigger a new deployment after it changes
+  triggers = {
     redeployment = sha1(jsonencode([
       aws_api_gateway_resource.agencies_resource,
       aws_api_gateway_method.agencies_resource_method,
