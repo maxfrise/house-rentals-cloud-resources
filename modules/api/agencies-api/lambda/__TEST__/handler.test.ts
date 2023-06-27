@@ -30,7 +30,7 @@ describe("Hanlder", () => {
     test("echo the event", async () => {
         const result = await handler(event, mockedContext, () => undefined)
         expect(result).toStrictEqual({
-            body: '{"message":{"name":"Agency A"}}',
+            body: "{\"message\":{\"name\":\"Agency A\",\"phone\":\"3121333348\",\"email\":\"myagency@gmail.com\"}}",
             statusCode: 200
         });
     });

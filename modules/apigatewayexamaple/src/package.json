@@ -1,18 +1,15 @@
 {
-  "name": "src",
+  "name": "@maxfrise-cloud/api-gtw-example",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
+  "private": true,
   "scripts": {
+    "test": "tsc && eslint && vitest run --coverage",
     "prebuild": "rm -rf dist",
     "build": "esbuild index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/aws-lambda": "^8.10.119",
-    "aws-lambda": "^1.0.7",
-    "esbuild": "^0.18.6"
-  }
+  "license": "ISC"
 }
