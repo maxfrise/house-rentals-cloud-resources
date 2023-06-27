@@ -21,67 +21,32 @@ provider "aws" {
   region = "us-west-2"
 }
 
-module "agencies_api_gateway" {
-  source = "./modules/api/agencies-api"
-
-  building_path        = "./modules/api/agencies-api/lambda/dist"
-  lambda_code_filename = "index.zip"
-  lambda_src_path      = "./modules/api/agencies-api/lambda/src"
-}
-
-module "maxfrise_api_gateway" {
-  source = "./modules/api/maxfrise-api"
-}
-
 module "dynamoDB_agencies_test_table" {
-  source = "./modules/database/agencies-test-table"
+  source = "./terraform/database/agencies-test-table"
 }
 
 module "dynamoDB_agencies_prod_table" {
-  source = "./modules/database/agencies-prod-table"
+  source = "./terraform/database/agencies-prod-table"
 }
 
-module "s3_bucket" {
-  source = "./modules/s3bucket"
-
-  bucket_name = "testing-submodules-resources"
-
-  tags = {
-    Terraform   = "true"
-    Environment = "dev"
-    MaxfriseAPI = "true"
-  }
+module "iam_maxfrise_lambdas" {
+  source = "./terraform/certs/lambdas"
 }
 
-module "sample_lambda" {
-  source = "./modules/lambdaexample"
+module "agencies_lambda" {
+  source = "./terraform/lambdas/agencies"
 
-  building_path        = "./modules/lambdaexample/src/dist"
-  lambda_code_filename = "index.zip"
-  lambda_src_path      = "./modules/lambdaexample/src"
-}
-
-module "sample_s3_lambda" {
-  source = "./modules/lambdas3example"
-
-  source_file        = "./modules/lambdas3example/src/dist/index.js"
-  lambda_output_path = "./modules/lambdas3example/src/dist/lambda.zip"
+  iam_arn            = module.iam_maxfrise_lambdas.arn
+  source_file        = "./functions/agencies/dist/index.js"
+  lambda_output_path = "./functions/agencies/dist/lambda.zip"
   bucket             = "maxfrisedeployables"
-  s3_suffix          = "lambas3example"
-  bucketKey          = "sample_s3_lambda.zip"
+  s3_suffix          = "agencies_lambda"
+  bucketKey          = "agencies_lambda.zip"
 }
 
-module "sample_dynamodb_table" {
-  source = "./modules/dynamodbtableexample"
-}
+module "maxfrise_api_gateway" {
+  source = "./terraform/api"
 
-
-module "sample_api_gateway" {
-  source = "./modules/apigatewayexamaple"
-
-  source_file        = "./modules/apigatewayexamaple/src/dist/index.js"
-  lambda_output_path = "./modules/apigatewayexamaple/src/dist/lambda.zip"
-  bucket             = "maxfrisedeployables"
-  bucketKey          = "tf-lambda-apigw-sample.zip"
-  example_secret     = "this_is_a_secrete"
+  agencies_function_name       = module.agencies_lambda.lambda_name
+  agencies_function_invoke_arn = module.agencies_lambda.lambda_invoke_arn
 }
