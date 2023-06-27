@@ -16,7 +16,6 @@
     "@aws-sdk/client-dynamodb": "^3.359.0",
     "@aws-sdk/lib-dynamodb": "^3.360.0",
     "@aws-sdk/util-dynamodb": "^3.359.0",
-    "aws-sdk-client-mock": "^2.1.1",
-    "uuid": "^9.0.0"
+    "aws-sdk-client-mock": "^2.1.1"
   }
 }
