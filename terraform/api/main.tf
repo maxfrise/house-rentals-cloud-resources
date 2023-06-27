@@ -109,5 +109,5 @@ resource "aws_lambda_permission" "agencies_api_lambda_permission" {
   function_name = var.agencies_function_name
   principal     = "apigateway.amazonaws.com"
 
-  source_arn = "${aws_api_gateway_rest_api.agencies_api.execution_arn}/*"
+  source_arn = "${aws_api_gateway_rest_api.maxfrise_api.execution_arn}/*"
 }
