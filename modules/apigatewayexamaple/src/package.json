@@ -5,7 +5,7 @@
   "main": "index.ts",
   "private": true,
   "scripts": {
-    "test": "tsc && eslint && vitest run",
+    "test": "tsc && eslint && vitest run --coverage",
     "prebuild": "rm -rf dist",
     "build": "esbuild index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js"
   },
