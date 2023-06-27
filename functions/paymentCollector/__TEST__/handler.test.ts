@@ -1,7 +1,7 @@
-import { handler } from "../index"
+import { handler } from "../src/index"
 import { mockClient } from 'aws-sdk-client-mock';
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import type { Event } from "../event";
+import type { Event } from "../src/event";
 
 const event: Event = {
   environment: 'test',
@@ -80,5 +80,12 @@ describe("paymentCollector", () => {
       ...event,
       environment: 'prod'
     })).rejects.toThrowError('Payment does not exisist!');
+  })
+
+  it('should throw an exception when failing to update the db', async () => {
+    ddbMock.on(QueryCommand).resolves({ Items: [{}] })
+      .on(UpdateCommand)
+      .rejects("Error")
+    await expect(() => handler(event)).rejects.toThrowError('Error: Error');
   })
 });
