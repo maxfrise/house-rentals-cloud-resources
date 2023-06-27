@@ -59,7 +59,6 @@ module "sample_lambda" {
   building_path        = "./modules/lambdaexample/src/dist"
   lambda_code_filename = "index.zip"
   lambda_src_path      = "./modules/lambdaexample/src"
-  lambda_src_file      = "./modules/lambdaexample/src/index.ts"
 }
 
 module "sample_s3_lambda" {
