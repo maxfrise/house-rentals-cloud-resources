@@ -73,13 +73,9 @@ describe("paymentCollector", () => {
     });
   })
 
-
   it('should throw an exception when payment is not found', async () => {
     mockDB('paymentJobs-prod', 'invalid', 'invalid')
-    await expect(() => handler({
-      ...event,
-      environment: 'prod'
-    })).rejects.toThrowError('Payment does not exisist!');
+    await expect(() => handler(event)).rejects.toThrowError('Payment does not exisist!');
   })
 
   it('should throw an exception when failing to update the db', async () => {
