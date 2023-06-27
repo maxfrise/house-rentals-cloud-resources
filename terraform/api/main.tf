@@ -72,6 +72,11 @@ resource "aws_api_gateway_integration_response" "agencies_lambda_integration_res
 }
 EOF
   }
+
+  depends_on = [
+    aws_api_gateway_method_response.agencies_resource_method_response,
+    aws_api_gateway_method.agencies_resource_method,
+  ]
 }
 
 ## DEPLOYMENTS ## 
