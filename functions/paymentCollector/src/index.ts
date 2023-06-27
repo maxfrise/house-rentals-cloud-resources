@@ -81,7 +81,7 @@ async function paymentExist(pk: string, sk: string, tableName: string) {
     const response = await ddb.send(new QueryCommand(input))
     exist = response.Items!.length > 0
   } catch (e) {
-    console.log("Error quering the db")
+    console.log("Error querying the db")
   }
 
   return exist
