@@ -82,7 +82,7 @@ resource "aws_api_gateway_deployment" "api_test_deployment" {
       aws_api_gateway_resource.agencies_resource,
       aws_api_gateway_method.agencies_resource_method,
       aws_api_gateway_integration.agencies_lambda_integration_request,
-      aws_api_gateway_integration.agencies_lambda_integration_response
+      aws_api_gateway_integration_response.agencies_lambda_integration_response
     ]))
   }
 
@@ -99,7 +99,7 @@ resource "aws_api_gateway_deployment" "api_prod_deployment" {
       aws_api_gateway_resource.agencies_resource,
       aws_api_gateway_method.agencies_resource_method,
       aws_api_gateway_integration.agencies_lambda_integration_request,
-      aws_api_gateway_integration.agencies_lambda_integration_response
+      aws_api_gateway_integration_response.agencies_lambda_integration_response
     ]))
   }
 
