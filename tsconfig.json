@@ -15,8 +15,7 @@
     "outDir": "dist",
     "noEmit": true,
     "types": [
-      "vitest/globals",
-      "@types/jest"
+      "vitest/globals"
     ],
     "resolveJsonModule": true
   },
