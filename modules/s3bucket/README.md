@@ -1,1 +1,0 @@
-TODO: Document what this resource is about
