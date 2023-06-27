@@ -48,5 +48,5 @@ module "maxfrise_api_gateway" {
   source = "./terraform/api"
 
   agencies_function_name       = module.agencies_lambda.lambda_name
-  agencies_function_invoke_arn = module.agencies_lambda.invoke_arn
+  agencies_function_invoke_arn = module.agencies_lambda.lambda_invoke_arn
 }
