@@ -1,0 +1,24 @@
+{
+  "name": "paymentcollector",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "vitest",
+    "prebuild": "rm -rf dist",
+    "build": "esbuild index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
+    "postbuild": "cd dist && zip -r index.zip index.js* && rm -rf index.js index.js.map"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@aws-sdk/client-dynamodb": "^3.359.0",
+    "@aws-sdk/util-dynamodb": "^3.359.0",
+    "aws-sdk-client-mock": "^2.1.1",
+    "uuid": "^9.0.0"
+  },
+  "dependencies": {
+    "@aws-sdk/lib-dynamodb": "^3.359.0"
+  }
+}
