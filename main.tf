@@ -26,7 +26,7 @@ module "agencies_api_gateway" {
 
   building_path        = "./terraform/api/agencies-api/lambda/dist"
   lambda_code_filename = "index.zip"
-  lambda_src_path      = "./terraform/api/agencies-api/lambda/src"
+  lambda_src_path      = "./terraform/api/agencies-api/lambda"
 }
 
 module "maxfrise_api_gateway" {
