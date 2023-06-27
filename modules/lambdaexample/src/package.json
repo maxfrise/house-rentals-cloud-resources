@@ -2,11 +2,11 @@
   "name": "@maxfrise-cloud/lambdaexample",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "type": "module",
   "private": true,
   "scripts": {
-    "test": "vitest run",
+    "test": "tsc && eslint && vitest run",
     "prebuild": "rm -rf dist",
     "build": "esbuild index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
     "postbuild": "cd dist && zip -r index.zip index.js* && rm -rf index.js index.js.map"
