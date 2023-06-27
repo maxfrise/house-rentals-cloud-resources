@@ -40,6 +40,16 @@ resource "aws_api_gateway_integration" "agencies_lambda_integration" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = var.agencies_function_invoke_arn
+
+    # Transforms the incoming XML request to JSON
+  request_templates = {
+    "application/xml" = <<EOF
+    {
+      "body" : $input.json('$'),
+      "environment": "$stageVariables.environment"
+    }
+    EOF
+  }
 }
 
 ## DEPLOYMENTS ## 
