@@ -21,10 +21,6 @@ provider "aws" {
   region = "us-west-2"
 }
 
-module "maxfrise_api_gateway" {
-  source = "./terraform/api/maxfrise-api"
-}
-
 module "dynamoDB_agencies_test_table" {
   source = "./terraform/database/agencies-test-table"
 }
@@ -46,4 +42,11 @@ module "agencies_lambda" {
   bucket             = "maxfrisedeployables"
   s3_suffix          = "agencies_lambda"
   bucketKey          = "agencies_lambda.zip"
+}
+
+module "maxfrise_api_gateway" {
+  source = "./terraform/api"
+
+  agencies_function_name       = module.agencies_lambda.lambda_name
+  agencies_function_invoke_arn = module.agencies_lambda.lambda_invoke_arn
 }

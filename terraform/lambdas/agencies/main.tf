@@ -12,7 +12,7 @@ resource "aws_s3_object" "agencies_s3_bucket" {
 }
 
 resource "aws_lambda_function" "agencies_lambda" {
-  function_name    = "agencies-lambda"
+  function_name    = "agencies_lambda"
   description      = "Lambda to manage agencies"
   s3_bucket        = var.bucket
   s3_key           = aws_s3_object.agencies_s3_bucket.key
