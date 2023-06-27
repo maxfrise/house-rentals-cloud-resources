@@ -41,7 +41,7 @@ resource "aws_api_gateway_integration" "agencies_lambda_integration" {
   type                    = "AWS"
   uri                     = var.agencies_function_invoke_arn
 
-  request_templates = {t
+  request_templates = {
     "application/xml" = <<EOF
     {
       "body" : $input.json('$'),
