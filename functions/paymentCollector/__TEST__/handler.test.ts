@@ -1,5 +1,4 @@
 import { handler } from "../index"
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import type { Event } from "../event";

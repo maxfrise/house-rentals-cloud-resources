@@ -1,12 +1,13 @@
 {
-  "name": "paymentcollector",
+  "name": "@maxfrise-cloud/paymentcollector",
+  "private": true,
   "version": "0.0.1",
   "description": "",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "scripts": {
     "test": "vitest",
     "prebuild": "rm -rf dist",
-    "build": "esbuild index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
+    "build": "esbuild index.ts --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
     "postbuild": "cd dist && zip -r index.zip index.js* && rm -rf index.js index.js.map"
   },
   "keywords": [],
@@ -14,11 +15,9 @@
   "license": "ISC",
   "devDependencies": {
     "@aws-sdk/client-dynamodb": "^3.359.0",
+    "@aws-sdk/lib-dynamodb": "^3.360.0",
     "@aws-sdk/util-dynamodb": "^3.359.0",
     "aws-sdk-client-mock": "^2.1.1",
     "uuid": "^9.0.0"
-  },
-  "dependencies": {
-    "@aws-sdk/lib-dynamodb": "^3.359.0"
   }
 }
