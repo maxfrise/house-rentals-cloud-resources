@@ -41,12 +41,10 @@ module "dynamoDB_agencies_prod_table" {
   source = "./terraform/database/agencies-prod-table"
 }
 
-module "sample_s3_lambda" {
-  source = "./functions/lambdas3example"
+module "sample_lambda" {
+  source = "./functions/lambdaexample"
 
-  source_file        = "./functions/lambdas3example/src/dist/index.js"
-  lambda_output_path = "./functions/lambdas3example/src/dist/lambda.zip"
-  bucket             = "maxfrisedeployables"
-  s3_suffix          = "lambas3example"
-  bucketKey          = "sample_s3_lambda.zip"
+  building_path        = "./functions/lambdaexample/src/dist"
+  lambda_code_filename = "index.zip"
+  lambda_src_path      = "./functions/lambdaexample/src"
 }
