@@ -8,8 +8,8 @@ resource "aws_api_gateway_rest_api" "maxfrise_api" {
 }
 
 
-## RESOURCES ## 
-## ------------------------------ ##
+// RESOURCES
+// ------------------------------ //
 
 resource "aws_api_gateway_resource" "agencies_resource" {
   rest_api_id = aws_api_gateway_rest_api.maxfrise_api.id
@@ -18,8 +18,8 @@ resource "aws_api_gateway_resource" "agencies_resource" {
 }
 
 
-## METHODS ## 
-## ------------------------------ ##
+// METHODS
+// ------------------------------ //
 
 resource "aws_api_gateway_method" "agencies_resource_method" {
   rest_api_id   = aws_api_gateway_rest_api.maxfrise_api.id
@@ -29,8 +29,8 @@ resource "aws_api_gateway_method" "agencies_resource_method" {
 }
 
 
-## INTEGRATIONS ## 
-## ------------------------------ ##
+// INTEGRATIONS
+// ------------------------------ //
 
 resource "aws_api_gateway_integration" "agencies_lambda_integration" {
   rest_api_id = aws_api_gateway_rest_api.maxfrise_api.id
@@ -42,8 +42,8 @@ resource "aws_api_gateway_integration" "agencies_lambda_integration" {
   uri                     = var.agencies_function_invoke_arn
 }
 
-## DEPLOYMENTS ## 
-## ------------------------------ ##
+// DEPLOYMENTS
+// ------------------------------ //
 
 resource "aws_api_gateway_deployment" "api_test_deployment" {
   triggers = { // This needs to include everything that we want to trigger a new deployment after it changes
@@ -77,8 +77,8 @@ resource "aws_api_gateway_deployment" "api_prod_deployment" {
   }
 }
 
-## STAGES ## 
-## ------------------------------ ##
+// STAGES 
+// ------------------------------ //
 
 resource "aws_api_gateway_stage" "test" {
   deployment_id = aws_api_gateway_deployment.api_test_deployment.id
@@ -100,8 +100,8 @@ resource "aws_api_gateway_stage" "prod" {
   }
 }
 
-## PERMISSIONS ## 
-## ------------------------------ ##
+// PERMISSIONS 
+// ------------------------------ //
 
 resource "aws_lambda_permission" "agencies_api_lambda_permission" {
   statement_id  = "AllowExecutionFromAPIGateway"
