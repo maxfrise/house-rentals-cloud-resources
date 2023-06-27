@@ -33,6 +33,10 @@ module "dynamoDB_agencies_prod_table" {
   source = "./terraform/database/agencies-prod-table"
 }
 
+module "iam_maxfrise_lambdas" {
+  source = "./terraform/certs/lambdas"
+}
+
 module "agencies_lambda" {
   source = "./terraform/lambdas/agencies"
 
