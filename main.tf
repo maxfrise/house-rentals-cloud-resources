@@ -40,6 +40,7 @@ module "iam_maxfrise_lambdas" {
 module "agencies_lambda" {
   source = "./terraform/lambdas/agencies"
 
+  iam_arn            = module.iam_maxfrise_lambdas.arn
   source_file        = "./functions/agencies/dist/index.js"
   lambda_output_path = "./functions/agencies/dist/lambda.zip"
   bucket             = "maxfrisedeployables"

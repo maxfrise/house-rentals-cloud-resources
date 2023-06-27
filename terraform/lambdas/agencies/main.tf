@@ -17,7 +17,7 @@ resource "aws_lambda_function" "agencies_lambda" {
   s3_bucket        = var.bucket
   s3_key           = aws_s3_object.agencies_s3_upload.key
   runtime          = "nodejs18.x"
-  role             = aws_iam_role.iam_maxfrise_lambdas.arn
+  role             = var.iam_arn
   source_code_hash = data.archive_file.agencies_source.output_base64sha256
   handler          = "index.handler"
   architectures    = ["arm64"]

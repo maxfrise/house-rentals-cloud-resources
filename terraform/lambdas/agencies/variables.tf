@@ -22,3 +22,8 @@ variable "bucketKey" {
   description = "The name of the file where the lambda code exisits"
   type        = string
 }
+
+variable "iam_arn" {
+  description = "The iam arn role for lambdas"
+  type        = string
+}
