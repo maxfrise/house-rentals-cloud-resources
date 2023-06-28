@@ -8,7 +8,7 @@ const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
 
 export const addAgency = async (event: Event<AgenciesRequest>): Promise<string | null> => {
-  const tableName = event.environment === "prod" ? "agencies-prod-table" : "agencies-test-table"
+  const tableName = event.environment === "prod" ? "agencies-prod-table" : "agencies-test-table";
   const date = new Date();
   const agencyId = `${date.getTime()}-${event.body.ownerId}`;
 
@@ -34,7 +34,11 @@ export const addAgency = async (event: Event<AgenciesRequest>): Promise<string |
   });
 
   try {
-    await ddb.send(newItemCommand);
+    const result = await ddb.send(newItemCommand);
+
+    if (result && result.$metadata.httpStatusCode !== 200) {
+      throw ('Error on dynamo creation');
+    }
   } catch (e) {
     console.error('Error on put command execution');
     console.log(e);

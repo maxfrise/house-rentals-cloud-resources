@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 
 import { handler } from '../src';
 import { mockedContext } from '../../common/mocks';
-import { Event, Response, StatusCodes, StageEnvironment } from '../../common';
+import { Event, Response, StatusCodes } from '../../common';
 import { AgenciesRequest, AgenciesResponse } from '../src/types';
 
 const mockedEvent: Event<AgenciesRequest> = {
@@ -20,16 +20,16 @@ const mockedEvent: Event<AgenciesRequest> = {
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
-const mockDB = (tableName: string, statusCode = 200) => {
-  if (statusCode === 200) {
-    return ddbMock.on(PutCommand, { TableName: tableName }).resolves({
-      $metadata: {
-        httpStatusCode: statusCode
-      }
-    });
+const mockDB = (tableName: string, rejects = false, item = null) => {
+  if (rejects) {
+    return ddbMock.on(PutCommand, { TableName: tableName }).rejects();
   }
 
-  ddbMock.on(PutCommand, { TableName: tableName }).rejects();
+  return ddbMock.on(PutCommand, item || { TableName: tableName }).resolves({
+    $metadata: {
+      httpStatusCode: 200
+    }
+  });
 }
 
 describe('agencies handler', () => {
@@ -72,8 +72,7 @@ describe('agencies handler', () => {
       const date = new Date(2000, 1, 1, 13)
       vi.setSystemTime(date);
 
-      // This should break given that I only mocked the test table not the prod table right?
-      mockDB('agencies-test-table');
+      mockDB('agencies-prod-table');
 
       const response = await handler({ ...mockedEvent, environment: 'prod' }, mockedContext, () => undefined) as Response<AgenciesResponse>;
 
@@ -123,7 +122,7 @@ describe('agencies handler', () => {
     });
 
     it('Should return status 500 if creation fails', async () => {
-      mockDB('agencies-test-table', 500);
+      mockDB('agencies-test-table', true);
       const response = await handler(mockedEvent, mockedContext, () => undefined) as Response<AgenciesResponse>;
 
       expect(response.statusCode).toBe(StatusCodes.error);
