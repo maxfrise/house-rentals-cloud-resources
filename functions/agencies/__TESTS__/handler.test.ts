@@ -49,10 +49,10 @@ describe('agencies handler', () => {
 
       mockDB('agencies-test-table');
 
-      const response = await handler(mockedEvent, mockedContext, () => undefined) as Response<AgenciesResponse>;
+      const response = await handler(mockedEvent, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.ok);
-      expect(response.body.agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
+      expect(JSON.parse(response.body).agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
     });
 
     it('Should execute creation correctly when optional values are not present', async () => {
@@ -62,10 +62,10 @@ describe('agencies handler', () => {
       mockDB('agencies-test-table');
 
       //@ts-ignore
-      const response = await handler(event, mockedContext, () => undefined) as Response<AgenciesResponse>;
+      const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.ok);
-      expect(response.body.agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
+      expect(JSON.parse(response.body).agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
     });
 
     it('Should execute creation correctly when is prod', async () => {
@@ -74,10 +74,10 @@ describe('agencies handler', () => {
 
       mockDB('agencies-prod-table');
 
-      const response = await handler({ ...mockedEvent, environment: 'prod' }, mockedContext, () => undefined) as Response<AgenciesResponse>;
+      const response = await handler({ ...mockedEvent, environment: 'prod' }, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.ok);
-      expect(response.body.agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
+      expect(JSON.parse(response.body).agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
     });
   });
 
@@ -85,25 +85,28 @@ describe('agencies handler', () => {
     it('Should return status 400 if ownerId is not provided', async () => {
       const event = { ...mockedEvent, body: { ...mockedEvent.body, ownerId: null } };
       //@ts-ignore
-      const response = await handler(event, mockedContext, () => undefined) as Response<AgenciesResponse>;
+      const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.badRequest);
+      expect(response.body).toBe('');
     });
 
     it('Should return status 400 if action is not provided', async () => {
       const event = { ...mockedEvent, body: { ...mockedEvent.body, action: undefined } };
       //@ts-ignore
-      const response = await handler(event, mockedContext, () => undefined) as Response<AgenciesResponse>;
+      const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.badRequest);
+      expect(response.body).toBe('');
     });
 
     it('Should return status 400 if action is not recognized', async () => {
       const event = { ...mockedEvent, body: { ...mockedEvent.body, action: 'WHATEVER' } };
       //@ts-ignore
-      const response = await handler(event, mockedContext, () => undefined) as Response<AgenciesResponse>;
+      const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.badRequest);
+      expect(response.body).toBe('');
     });
   });
 
@@ -120,17 +123,19 @@ describe('agencies handler', () => {
 
     it('Should return status 500 if creation fails', async () => {
       mockDB('agencies-test-table', true);
-      const response = await handler(mockedEvent, mockedContext, () => undefined) as Response<AgenciesResponse>;
+      const response = await handler(mockedEvent, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.error);
+      expect(response.body).toBe('');
       expect(console.error).toHaveBeenCalledTimes(2);
     });
 
     it('Should return status 500 if something wrong goes in dynamo process', async () => {
       mockDB('agencies-prod-table'); // Mocking a different table to mock a put in a non existance table
-      const response = await handler(mockedEvent, mockedContext, () => undefined) as Response<AgenciesResponse>;
+      const response = await handler(mockedEvent, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.error);
+      expect(response.body).toBe('');
       expect(console.error).toHaveBeenCalledTimes(1);
       expect(console.error).toHaveBeenCalledWith('Error on dynamo DB');
     });

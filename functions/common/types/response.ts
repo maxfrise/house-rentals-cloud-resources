@@ -4,7 +4,9 @@ export enum StatusCodes {
   "badRequest" = 400
 };
 
-export type Response<ResponseBody> = {
+export type Response = {
+  isBase64Encoded: boolean,
+  headers: {},
   statusCode: StatusCodes,
-  body: ResponseBody,
+  body: string,
 };

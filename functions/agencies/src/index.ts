@@ -1,16 +1,14 @@
-import { Handler } from 'aws-lambda';
+import { Handler, } from 'aws-lambda';
 
 import { AgenciesRequest, AgenciesResponse } from './types';
-import { Event, Response, StatusCodes } from '../../common';
+import { Event, Response, StatusCodes, defaultResponse } from '../../common';
 import { addAgency } from './actions';
 
-export const handler: Handler<Event<AgenciesRequest>, Response<AgenciesResponse>> = async (event) => {
+export const handler: Handler<Event<AgenciesRequest>, Response> = async (event) => {
   if (!event.body.action || !event.body.ownerId) {
     return {
+      ...defaultResponse,
       statusCode: StatusCodes.badRequest,
-      body: {
-        agencyId: null
-      }
     }
   }
 
@@ -19,25 +17,22 @@ export const handler: Handler<Event<AgenciesRequest>, Response<AgenciesResponse>
 
     if (agencyId) {
       return {
+        ...defaultResponse,
         statusCode: StatusCodes.ok,
-        body: {
+        body: JSON.stringify({
           agencyId
-        }
+        })
       }
     }
 
     return {
+      ...defaultResponse,
       statusCode: StatusCodes.error,
-      body: {
-        agencyId
-      }
     }
   }
 
   return {
+    ...defaultResponse,
     statusCode: StatusCodes.badRequest,
-    body: {
-      agencyId: null
-    }
   }
 };
