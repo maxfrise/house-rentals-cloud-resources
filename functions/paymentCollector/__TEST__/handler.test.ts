@@ -1,7 +1,7 @@
 import { handler } from "../src/index"
 import { mockClient } from 'aws-sdk-client-mock';
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import { Event, Response, StatusCodes } from '../../common';
+import { Event } from '../../common';
 import { PaymentCollectorRequest } from "../src/event";
 import { mockedContext } from '../../common/mocks';
 
