@@ -61,7 +61,8 @@ describe('agencies handler', () => {
       const event = { ...mockedEvent, body: { ...mockedEvent.body, address: undefined, name: null, phone: null } }
       mockDB('agencies-test-table');
 
-      const response = await handler(mockedEvent, mockedContext, () => undefined) as Response<AgenciesResponse>;
+      //@ts-ignore
+      const response = await handler(event, mockedContext, () => undefined) as Response<AgenciesResponse>;
 
       expect(response.statusCode).toBe(StatusCodes.ok);
       expect(response.body.agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
