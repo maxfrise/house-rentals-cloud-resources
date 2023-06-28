@@ -7,7 +7,7 @@ import { AgenciesRequest } from "../types";
 const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
 
-export const addAgency = async (event: Event<AgenciesRequest>): Promise<string> => {
+export const addAgency = async (event: Event<AgenciesRequest>): Promise<string | null> => {
   const tableName = event.environment === "prod" ? "agencies-prod-table" : "agencies-test-table"
   const date = new Date();
   const agencyId = `${date.getTime()}-${event.body.ownerId}`;
@@ -36,8 +36,10 @@ export const addAgency = async (event: Event<AgenciesRequest>): Promise<string> 
   try {
     await ddb.send(newItemCommand);
   } catch (e) {
-    console.error('Some error');
+    console.error('Error on put command execution');
     console.log(e);
+
+    return null;
   }
 
   return agencyId;
