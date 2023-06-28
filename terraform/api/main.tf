@@ -39,6 +39,15 @@ resource "aws_api_gateway_integration" "agencies_lambda_integration_request" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = var.agencies_function_invoke_arn
+
+  request_templates = {
+      "application/json" = <<EOF
+  {
+    "body" : $input.json('$'),
+    "environment": "$stageVariables.environment"
+  }
+  EOF
+    }
 }
 
 ## DEPLOYMENTS ## 
