@@ -28,6 +28,13 @@ resource "aws_api_gateway_method" "agencies_resource_method" {
   authorization = "NONE"
 }
 
+resource "aws_api_gateway_method_response" "agencies_resource_method_response" {
+  rest_api_id = aws_api_gateway_rest_api.maxfrise_api.id
+  resource_id = aws_api_gateway_method.agencies_resource_method.resource_id
+  http_method = aws_api_gateway_method.agencies_resource_method.http_method
+  status_code = "200"
+}
+
 ## INTEGRATIONS ## 
 ## ------------------------------ ##
 
@@ -51,6 +58,19 @@ EOF
   }
 }
 
+resource "aws_api_gateway_integration_response" "agencies_lambda_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.maxfrise_api.id
+  resource_id = aws_api_gateway_method.agencies_resource_method.resource_id
+  http_method = aws_api_gateway_method.agencies_resource_method.http_method
+  status_code = aws_api_gateway_method_response.agencies_resource_method_response.status_code
+  response_parameters = {}
+
+  depends_on = [
+    aws_api_gateway_method_response.agencies_resource_method_response,
+    aws_api_gateway_method.agencies_resource_method,
+  ]
+}
+
 ## DEPLOYMENTS ## 
 ## ------------------------------ ##
 
@@ -60,6 +80,7 @@ resource "aws_api_gateway_deployment" "api_test_deployment" {
       aws_api_gateway_resource.agencies_resource,
       aws_api_gateway_method.agencies_resource_method,
       aws_api_gateway_integration.agencies_lambda_integration_request,
+      aws_api_gateway_integration_response.agencies_lambda_integration_response
     ]))
   }
 
@@ -76,6 +97,7 @@ resource "aws_api_gateway_deployment" "api_prod_deployment" {
       aws_api_gateway_resource.agencies_resource,
       aws_api_gateway_method.agencies_resource_method,
       aws_api_gateway_integration.agencies_lambda_integration_request,
+      aws_api_gateway_integration_response.agencies_lambda_integration_response
     ]))
   }
 
