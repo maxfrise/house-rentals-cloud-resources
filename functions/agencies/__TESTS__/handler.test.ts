@@ -47,7 +47,7 @@ describe('agencies handler', () => {
   });
 
   it('Should return status 400 if action is not provided', async () => {
-    const event = { ...mockedEvent, body: { ...mockedEvent.body, action: null } };
+    const event = { ...mockedEvent, body: { ...mockedEvent.body, action: undefined } };
     //@ts-ignore
     const response = await handler(event, mockedContext, () => undefined) as Response<AgenciesResponse>;
 
