@@ -65,15 +65,6 @@ resource "aws_api_gateway_integration_response" "agencies_lambda_integration_res
   status_code = aws_api_gateway_method_response.agencies_resource_method_response.status_code
   response_parameters = {}
 
-  response_templates = {
-    "application/json" = <<EOF
-{
-  "body" : $input.json('$'),
-  "status": 200
-}
-EOF
-  }
-
   depends_on = [
     aws_api_gateway_method_response.agencies_resource_method_response,
     aws_api_gateway_method.agencies_resource_method,
