@@ -1,19 +1,23 @@
+import { Handler, } from 'aws-lambda';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import type { Event } from "./event";
+import { Event, Response, StatusCodes, defaultResponse } from '../../common';
+import type { PaymentCollectorRequest } from "./event";
 
 const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
 
-export const handler = async (event: Event) => {
+export const handler: Handler<Event<PaymentCollectorRequest>, Response> = async (event) => {
   const body = event.body
   const tableName = event.environment === "prod" ? "paymentJobs-prod" : "paymentJobs"
-  let message = "Unknow status"
-  let statusCode: number | undefined = 200
 
   if (!await paymentExist(body.pk, body.sk, tableName)) {
-    throw new Error("Payment does not exisist!")
+    return {
+      ...defaultResponse,
+      statusCode: StatusCodes.notFound,
+      body: JSON.stringify({ message: 'payment not found' })
+    }
   }
 
   const input = {
@@ -45,21 +49,21 @@ export const handler = async (event: Event) => {
   const command = new UpdateCommand(input);
 
   try {
-    const result = await ddb.send(command)
-    statusCode = result.$metadata.httpStatusCode
-    message = "Rent collected successfully"
-
+    await ddb.send(command)
   } catch (error) {
-    message = "Unexpected error occured, verify the logs"
-    throw new Error(error as string)
+    return {
+      ...defaultResponse,
+      statusCode: StatusCodes.error,
+      body: JSON.stringify({ message: (error as Error).message })
+    }
   }
-
-  const response = {
-    statusCode,
-    message
+  return {
+    ...defaultResponse,
+    statusCode: StatusCodes.ok,
+    body: JSON.stringify({
+      message: 'Rent collected successfully'
+    })
   };
-
-  return response;
 };
 
 async function paymentExist(pk: string, sk: string, tableName: string) {

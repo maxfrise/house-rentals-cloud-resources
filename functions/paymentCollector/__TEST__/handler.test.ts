@@ -1,9 +1,11 @@
 import { handler } from "../src/index"
 import { mockClient } from 'aws-sdk-client-mock';
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import type { Event } from "../src/event";
+import { Event, Response, StatusCodes } from '../../common';
+import { PaymentCollectorRequest } from "../src/event";
+import { mockedContext } from '../../common/mocks';
 
-const event: Event = {
+const event: Event<PaymentCollectorRequest> = {
   environment: 'test',
   body: {
     pk: '123',
@@ -54,10 +56,14 @@ describe("paymentCollector", () => {
 
   it('should collect payment on test', async () => {
     mockDB('paymentJobs', '123', '234')
-    const result = await handler(event)
+    const result = await handler(event, mockedContext, () => undefined)
     expect(result).toStrictEqual({
+      body: "{\"message\":\"Rent collected successfully\"}",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      isBase64Encoded: false,
       statusCode: 200,
-      message: 'Rent collected successfully'
     });
   })
 
@@ -66,22 +72,42 @@ describe("paymentCollector", () => {
     const result = await handler({
       ...event,
       environment: 'prod'
-    })
+    }, mockedContext, () => undefined)
     expect(result).toStrictEqual({
+      body: "{\"message\":\"Rent collected successfully\"}",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      isBase64Encoded: false,
       statusCode: 200,
-      message: 'Rent collected successfully'
     });
   })
 
-  it('should throw an exception when payment is not found', async () => {
+  it('should handle invalid payments', async () => {
     mockDB('paymentJobs-prod', 'invalid', 'invalid')
-    await expect(() => handler(event)).rejects.toThrowError('Payment does not exisist!');
+    const result = await handler(event, mockedContext, () => undefined)
+    expect(result).toStrictEqual({
+      body: "{\"message\":\"payment not found\"}",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      isBase64Encoded: false,
+      statusCode: 404,
+    });
   })
 
-  it('should throw an exception when failing to update the db', async () => {
+  it('should handle errors trying to update the db', async () => {
     ddbMock.on(QueryCommand).resolves({ Items: [{}] })
       .on(UpdateCommand)
-      .rejects("Error")
-    await expect(() => handler(event)).rejects.toThrowError('Error: Error');
+      .rejects("the DB could not be updated")
+    const result = await handler(event, mockedContext, () => undefined)
+    expect(result).toStrictEqual({
+      body: "{\"message\":\"the DB could not be updated\"}",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      isBase64Encoded: false,
+      statusCode: 500,
+    });
   })
 });
