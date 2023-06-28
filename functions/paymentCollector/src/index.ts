@@ -2,8 +2,8 @@ import { Handler, } from 'aws-lambda';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import { Event, Response, StatusCodes, defaultResponse } from '../../common';
-import type { PaymentCollectorRequest } from "./event";
+import { Event, Response, StatusCodes, ApiResponse } from '../../common';
+import type { PaymentCollectorRequest, Responsebody } from "./event";
 
 const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
@@ -13,11 +13,7 @@ export const handler: Handler<Event<PaymentCollectorRequest>, Response> = async 
   const tableName = event.environment === "prod" ? "paymentJobs-prod" : "paymentJobs"
 
   if (!await paymentExist(body.pk, body.sk, tableName)) {
-    return {
-      ...defaultResponse,
-      statusCode: StatusCodes.notFound,
-      body: JSON.stringify({ message: 'payment not found' })
-    }
+    return new ApiResponse<Responsebody>(StatusCodes.notFound, { message: 'payment not found' })
   }
 
   const input = {
@@ -51,19 +47,10 @@ export const handler: Handler<Event<PaymentCollectorRequest>, Response> = async 
   try {
     await ddb.send(command)
   } catch (error) {
-    return {
-      ...defaultResponse,
-      statusCode: StatusCodes.error,
-      body: JSON.stringify({ message: (error as Error).message })
-    }
+    return new ApiResponse<Responsebody>(StatusCodes.error, {  message: (error as Error).message })
   }
-  return {
-    ...defaultResponse,
-    statusCode: StatusCodes.ok,
-    body: JSON.stringify({
-      message: 'Rent collected successfully'
-    })
-  };
+
+  return new ApiResponse<Responsebody>(StatusCodes.ok, { message: "Rent collected successfully" })
 };
 
 async function paymentExist(pk: string, sk: string, tableName: string) {

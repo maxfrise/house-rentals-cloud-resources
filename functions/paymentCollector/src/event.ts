@@ -3,3 +3,7 @@ export type PaymentCollectorRequest = {
   sk: string
   details: string
 }
+
+export type Responsebody = {
+  message: string
+}

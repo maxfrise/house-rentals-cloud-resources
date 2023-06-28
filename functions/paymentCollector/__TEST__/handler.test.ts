@@ -57,7 +57,7 @@ describe("paymentCollector", () => {
   it('should collect payment on test', async () => {
     mockDB('paymentJobs', '123', '234')
     const result = await handler(event, mockedContext, () => undefined)
-    expect(result).toStrictEqual({
+    expect(result).toMatchObject({
       body: "{\"message\":\"Rent collected successfully\"}",
       headers: {
         "Content-Type": "application/json"
@@ -73,7 +73,7 @@ describe("paymentCollector", () => {
       ...event,
       environment: 'prod'
     }, mockedContext, () => undefined)
-    expect(result).toStrictEqual({
+    expect(result).toMatchObject({
       body: "{\"message\":\"Rent collected successfully\"}",
       headers: {
         "Content-Type": "application/json"
@@ -86,7 +86,7 @@ describe("paymentCollector", () => {
   it('should handle invalid payments', async () => {
     mockDB('paymentJobs-prod', 'invalid', 'invalid')
     const result = await handler(event, mockedContext, () => undefined)
-    expect(result).toStrictEqual({
+    expect(result).toMatchObject({
       body: "{\"message\":\"payment not found\"}",
       headers: {
         "Content-Type": "application/json"
@@ -101,7 +101,7 @@ describe("paymentCollector", () => {
       .on(UpdateCommand)
       .rejects("the DB could not be updated")
     const result = await handler(event, mockedContext, () => undefined)
-    expect(result).toStrictEqual({
+    expect(result).toMatchObject({
       body: "{\"message\":\"the DB could not be updated\"}",
       headers: {
         "Content-Type": "application/json"
