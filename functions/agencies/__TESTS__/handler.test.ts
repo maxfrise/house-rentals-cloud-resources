@@ -55,6 +55,18 @@ describe('agencies handler', () => {
       expect(response.body.agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
     });
 
+    it('Should execute creation correctly when optional values are not present', async () => {
+      const date = new Date(2000, 1, 1, 13)
+      vi.setSystemTime(date);
+      const event = { ...mockedEvent, body: { ...mockedEvent.body, address: undefined, name: null, phone: null } }
+      mockDB('agencies-test-table');
+
+      const response = await handler(mockedEvent, mockedContext, () => undefined) as Response<AgenciesResponse>;
+
+      expect(response.statusCode).toBe(StatusCodes.ok);
+      expect(response.body.agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
+    });
+
     it('Should execute creation correctly when is prod', async () => {
       const date = new Date(2000, 1, 1, 13)
       vi.setSystemTime(date);
