@@ -33,16 +33,18 @@ export const addAgency = async (event: Event<AgenciesRequest>): Promise<string |
     TableName: tableName
   });
 
+  let result;
   try {
-    const result = await ddb.send(newItemCommand);
-
-    if (result && result.$metadata.httpStatusCode !== 200) {
-      throw ('Error on dynamo creation');
-    }
+    result = await ddb.send(newItemCommand);
   } catch (e) {
     console.error('Error on put command execution');
-    console.log(e);
+    console.error(e);
 
+    return null;
+  }
+
+  if (result?.$metadata?.httpStatusCode !== 200) {
+    console.error('Error on dynamo DB');
     return null;
   }
 

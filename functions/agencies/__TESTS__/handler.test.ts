@@ -22,7 +22,7 @@ const ddbMock = mockClient(DynamoDBDocumentClient);
 
 const mockDB = (tableName: string, rejects = false, item = null) => {
   if (rejects) {
-    return ddbMock.on(PutCommand, { TableName: tableName }).rejects();
+    return ddbMock.on(PutCommand, { TableName: tableName }).rejects('Some dynamo error');
   }
 
   return ddbMock.on(PutCommand, item || { TableName: tableName }).resolves({
@@ -109,16 +109,13 @@ describe('agencies handler', () => {
 
   describe('Error: Server error', () => {
     const errorLog = console.error;
-    const log = console.log;
 
     beforeEach(() => {
       console.error = vi.fn();
-      console.log = vi.fn();
     });
 
     afterEach(() => {
       console.error = errorLog;
-      console.log = log;
     });
 
     it('Should return status 500 if creation fails', async () => {
@@ -126,9 +123,16 @@ describe('agencies handler', () => {
       const response = await handler(mockedEvent, mockedContext, () => undefined) as Response<AgenciesResponse>;
 
       expect(response.statusCode).toBe(StatusCodes.error);
+      expect(console.error).toHaveBeenCalledTimes(2);
+    });
+
+    it('Should return status 500 if something wrong goes in dynamo process', async () => {
+      mockDB('agencies-prod-table'); // Mocking a different table to mock a put in a non existance table
+      const response = await handler(mockedEvent, mockedContext, () => undefined) as Response<AgenciesResponse>;
+
+      expect(response.statusCode).toBe(StatusCodes.error);
       expect(console.error).toHaveBeenCalledTimes(1);
-      expect(console.error).toHaveBeenCalledWith('Error on put command execution');
-      expect(console.log).toHaveBeenCalledTimes(1);
+      expect(console.error).toHaveBeenCalledWith('Error on dynamo DB');
     });
   });
 });
