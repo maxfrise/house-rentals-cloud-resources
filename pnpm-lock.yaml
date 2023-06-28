@@ -8,6 +8,15 @@ importers:
 
   .:
     devDependencies:
+      '@aws-sdk/client-dynamodb':
+        specifier: ^3.360.0
+        version: 3.360.0
+      '@aws-sdk/lib-dynamodb':
+        specifier: ^3.360.0
+        version: 3.360.0(@aws-sdk/client-dynamodb@3.360.0)(@aws-sdk/smithy-client@3.360.0)(@aws-sdk/types@3.357.0)
+      '@aws-sdk/util-dynamodb':
+        specifier: ^3.360.0
+        version: 3.360.0
       '@types/aws-lambda':
         specifier: ^8.10.117
         version: 8.10.117
@@ -26,6 +35,9 @@ importers:
       aws-lambda:
         specifier: ^1.0.7
         version: 1.0.7
+      aws-sdk-client-mock:
+        specifier: ^2.2.0
+        version: 2.2.0
       esbuild:
         specifier: ^0.18.0
         version: 0.18.0
