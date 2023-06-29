@@ -1,11 +1,24 @@
-import { Handler, } from 'aws-lambda';
+import { Handler, APIGatewayEvent } from 'aws-lambda';
 
 import { AgenciesRequest, AgenciesResponse } from './types';
-import { ApiResponse, Event, MaxfriseErrorCodes } from '../../common';
+import { ApiResponse, parseStageVariables, MaxfriseErrorCodes } from '../../common';
 import { addAgency } from './actions';
 
-export const handler: Handler<Event<AgenciesRequest>, ApiResponse<AgenciesResponse>> = async (event) => {
-  if (!event.body.action || !event.body.ownerId) {
+export const handler: Handler<APIGatewayEvent, ApiResponse<AgenciesResponse>> = async (event) => {
+  if (!event.body) {
+    return new ApiResponse<AgenciesResponse>(
+      MaxfriseErrorCodes.missingInfo.code,
+      {
+        response: {
+          errorMessage: MaxfriseErrorCodes.missingInfo.message
+        }
+      }
+    );
+  }
+  const environment = parseStageVariables(event.stageVariables?.environment);
+  const request = JSON.parse(event.body) as AgenciesRequest;
+
+  if (!request.action || !request.ownerId) {
     return new ApiResponse<AgenciesResponse>(
       MaxfriseErrorCodes.missingInfo.code,
       {
@@ -16,8 +29,8 @@ export const handler: Handler<Event<AgenciesRequest>, ApiResponse<AgenciesRespon
     );
   }
 
-  if (event.body.action === 'CREATE') {
-    return await addAgency(event);
+  if (request.action === 'CREATE') {
+    return await addAgency(request, environment);
   }
 
   return new ApiResponse<AgenciesResponse>(

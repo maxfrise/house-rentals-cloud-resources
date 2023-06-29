@@ -3,7 +3,7 @@ import { mockClient } from 'aws-sdk-client-mock';
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { Event } from '../../common';
 import { PaymentCollectorRequest } from "../src/event";
-import { mockedContext } from '../../common/mocks';
+import { mockedContext } from '../../__mocks__';
 
 const event: Event<PaymentCollectorRequest> = {
   environment: 'test',

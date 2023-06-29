@@ -1,16 +1,16 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 
-import { ApiResponse, Event, MaxfriseErrorCodes } from '../../../common';
+import { ApiResponse, Event, MaxfriseErrorCodes, StageEnvironment } from '../../../common';
 import { AgenciesRequest, AgenciesResponse } from "../types";
 
 const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
 
-export const addAgency = async (event: Event<AgenciesRequest>): Promise<ApiResponse<AgenciesResponse>> => {
-  const tableName = event.environment === "prod" ? "agencies-prod-table" : "agencies-test-table";
+export const addAgency = async (request: AgenciesRequest, environment: StageEnvironment): Promise<ApiResponse<AgenciesResponse>> => {
+  const tableName = environment === "prod" ? "agencies-prod-table" : "agencies-test-table";
   const date = new Date();
-  const agencyId = `${date.getTime()}-${event.body.ownerId}`;
+  const agencyId = `${date.getTime()}-${request.ownerId}`;
 
   const newItemCommand = new PutCommand({
     Item: {
@@ -18,16 +18,16 @@ export const addAgency = async (event: Event<AgenciesRequest>): Promise<ApiRespo
         S: agencyId
       },
       owner: {
-        S: event.body.ownerId
+        S: request.ownerId
       },
       address: {
-        S: event.body.address || ""
+        S: request.address || ""
       },
       name: {
-        S: event.body.name || ""
+        S: request.name || ""
       },
       phone: {
-        S: event.body.phone || ""
+        S: request.phone || ""
       }
     },
     TableName: tableName
