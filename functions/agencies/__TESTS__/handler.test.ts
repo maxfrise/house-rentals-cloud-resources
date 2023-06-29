@@ -3,10 +3,9 @@ import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { vi } from 'vitest';
 
 import { handler } from '../src';
-import { mockedContext } from '../../common/mocks';
 import { MaxfriseErrorCodes, Response, StatusCodes } from '../../common';
-import { AgenciesRequest, AgenciesResponse } from '../src/types';
-import { getMockedEvent } from '../../__mocks__/mocked-event';
+import { AgenciesRequest } from '../src/types';
+import { getMockedEvent, mockedContext } from '../../__mocks__/';
 
 const mockedBodyRequest: AgenciesRequest = {
   action: 'CREATE',
