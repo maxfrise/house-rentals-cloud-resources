@@ -23,7 +23,6 @@
     "@aws-sdk/lib-dynamodb": "^3.360.0",
     "@aws-sdk/util-dynamodb": "^3.360.0",
     "@types/aws-lambda": "^8.10.117",
-    "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
