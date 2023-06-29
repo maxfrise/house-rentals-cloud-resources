@@ -87,6 +87,15 @@ describe('agencies handler', () => {
   });
 
   describe('Error: Bad request', () => {
+    it('Should return status 400 if body is empty', async () => {
+      const event = getMockedEvent(JSON.stringify({}));
+      //@ts-ignore
+      const response = await handler(event, mockedContext, () => undefined) as Response;
+
+      expect(response.statusCode).toBe(StatusCodes.badRequest);
+      expect(JSON.parse(response.body).response.errorMessage).toBe(MaxfriseErrorCodes.missingInfo.message);
+    });
+
     it('Should return status 400 if ownerId is not provided', async () => {
       const bodyRequest = { ...mockedBodyRequest, ownerId: null };
       const event = getMockedEvent(JSON.stringify(bodyRequest));
