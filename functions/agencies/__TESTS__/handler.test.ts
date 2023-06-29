@@ -4,18 +4,16 @@ import { vi } from 'vitest';
 
 import { handler } from '../src';
 import { mockedContext } from '../../common/mocks';
-import { Event, MaxfriseErrorCodes, Response, StatusCodes } from '../../common';
+import { MaxfriseErrorCodes, Response, StatusCodes } from '../../common';
 import { AgenciesRequest, AgenciesResponse } from '../src/types';
+import { getMockedEvent } from '../../__mocks__/mocked-event';
 
-const mockedEvent: Event<AgenciesRequest> = {
-  body: {
-    action: 'CREATE',
-    address: 'Some address',
-    name: 'My agency',
-    ownerId: 'owner#email',
-    phone: '1234567890'
-  },
-  environment: 'test'
+const mockedBodyRequest: AgenciesRequest = {
+  action: 'CREATE',
+  address: 'Some address',
+  name: 'My agency',
+  ownerId: 'owner#email',
+  phone: '1234567890'
 };
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
@@ -49,23 +47,28 @@ describe('agencies handler', () => {
 
       mockDB('agencies-test-table');
 
-      const response = await handler(mockedEvent, mockedContext, () => undefined) as Response;
+      const event = getMockedEvent(JSON.stringify(mockedBodyRequest));
+
+      const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.ok);
-      expect(JSON.parse(response.body).response.agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
+      expect(JSON.parse(response.body).response.agencyId).toBe(`${date.getTime()}-${mockedBodyRequest.ownerId}`);
     });
 
     it('Should execute creation correctly when optional values are not present', async () => {
       const date = new Date(2000, 1, 1, 13)
       vi.setSystemTime(date);
-      const event = { ...mockedEvent, body: { ...mockedEvent.body, address: undefined, name: null, phone: null } }
+
+      const request = { ...mockedBodyRequest, address: undefined, name: null, phone: null };
+      const event = getMockedEvent(JSON.stringify(mockedBodyRequest));
+
       mockDB('agencies-test-table');
 
       //@ts-ignore
       const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.ok);
-      expect(JSON.parse(response.body).response.agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
+      expect(JSON.parse(response.body).response.agencyId).toBe(`${date.getTime()}-${request.ownerId}`);
     });
 
     it('Should execute creation correctly when is prod', async () => {
@@ -74,16 +77,19 @@ describe('agencies handler', () => {
 
       mockDB('agencies-prod-table');
 
-      const response = await handler({ ...mockedEvent, environment: 'prod' }, mockedContext, () => undefined) as Response;
+      const event = getMockedEvent(JSON.stringify(mockedBodyRequest), 'prod');
+
+      const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.ok);
-      expect(JSON.parse(response.body).response.agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
+      expect(JSON.parse(response.body).response.agencyId).toBe(`${date.getTime()}-${mockedBodyRequest.ownerId}`);
     });
   });
 
   describe('Error: Bad request', () => {
     it('Should return status 400 if ownerId is not provided', async () => {
-      const event = { ...mockedEvent, body: { ...mockedEvent.body, ownerId: null } };
+      const bodyRequest = { ...mockedBodyRequest, ownerId: null };
+      const event = getMockedEvent(JSON.stringify(bodyRequest));
       //@ts-ignore
       const response = await handler(event, mockedContext, () => undefined) as Response;
 
@@ -92,7 +98,8 @@ describe('agencies handler', () => {
     });
 
     it('Should return status 400 if action is not provided', async () => {
-      const event = { ...mockedEvent, body: { ...mockedEvent.body, action: undefined } };
+      const bodyRequest = { ...mockedBodyRequest, action: null };
+      const event = getMockedEvent(JSON.stringify(bodyRequest));
       //@ts-ignore
       const response = await handler(event, mockedContext, () => undefined) as Response;
 
@@ -101,7 +108,8 @@ describe('agencies handler', () => {
     });
 
     it('Should return status 400 if action is not recognized', async () => {
-      const event = { ...mockedEvent, body: { ...mockedEvent.body, action: 'WHATEVER' } };
+      const bodyRequest = { ...mockedBodyRequest, action: 'WHATEVER' };
+      const event = getMockedEvent(JSON.stringify(bodyRequest));
       //@ts-ignore
       const response = await handler(event, mockedContext, () => undefined) as Response;
 
@@ -123,7 +131,10 @@ describe('agencies handler', () => {
 
     it('Should return status 500 if creation fails', async () => {
       mockDB('agencies-test-table', true);
-      const response = await handler(mockedEvent, mockedContext, () => undefined) as Response;
+
+      const event = getMockedEvent(JSON.stringify(mockedBodyRequest));
+
+      const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.error);
       expect(JSON.parse(response.body).response.errorMessage).toBe(MaxfriseErrorCodes.errorFromDynamo.message);
@@ -132,7 +143,9 @@ describe('agencies handler', () => {
 
     it('Should return status 500 if something wrong goes in dynamo process', async () => {
       mockDB('agencies-prod-table'); // Mocking a different table to mock a put in a non existance table
-      const response = await handler(mockedEvent, mockedContext, () => undefined) as Response;
+
+      const event = getMockedEvent(JSON.stringify(mockedBodyRequest));
+      const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.error);
       expect(JSON.parse(response.body).response.errorMessage).toBe(MaxfriseErrorCodes.errorFromDynamo.message);
