@@ -60,7 +60,7 @@ describe('agencies handler', () => {
       vi.setSystemTime(date);
 
       const request = { ...mockedBodyRequest, address: undefined, name: null, phone: null };
-      const event = getMockedEvent(JSON.stringify(mockedBodyRequest));
+      const event = getMockedEvent(JSON.stringify(request));
 
       mockDB('agencies-test-table');
 
@@ -88,7 +88,7 @@ describe('agencies handler', () => {
 
   describe('Error: Bad request', () => {
     it('Should return status 400 if body is empty', async () => {
-      const event = getMockedEvent(JSON.stringify({}));
+      const event = getMockedEvent('');
       //@ts-ignore
       const response = await handler(event, mockedContext, () => undefined) as Response;
 
