@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 
 import { handler } from '../src';
 import { mockedContext } from '../../common/mocks';
-import { Event, Response, StatusCodes } from '../../common';
+import { Event, MaxfriseErrorCodes, Response, StatusCodes } from '../../common';
 import { AgenciesRequest, AgenciesResponse } from '../src/types';
 
 const mockedEvent: Event<AgenciesRequest> = {
@@ -52,7 +52,7 @@ describe('agencies handler', () => {
       const response = await handler(mockedEvent, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.ok);
-      expect(JSON.parse(response.body).agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
+      expect(JSON.parse(response.body).response.agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
     });
 
     it('Should execute creation correctly when optional values are not present', async () => {
@@ -65,7 +65,7 @@ describe('agencies handler', () => {
       const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.ok);
-      expect(JSON.parse(response.body).agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
+      expect(JSON.parse(response.body).response.agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
     });
 
     it('Should execute creation correctly when is prod', async () => {
@@ -77,7 +77,7 @@ describe('agencies handler', () => {
       const response = await handler({ ...mockedEvent, environment: 'prod' }, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.ok);
-      expect(JSON.parse(response.body).agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
+      expect(JSON.parse(response.body).response.agencyId).toBe(`${date.getTime()}-${mockedEvent.body.ownerId}`);
     });
   });
 
@@ -88,7 +88,7 @@ describe('agencies handler', () => {
       const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.badRequest);
-      expect(response.body).toBe('');
+      expect(JSON.parse(response.body).response.errorMessage).toBe(MaxfriseErrorCodes.missingInfo.message);
     });
 
     it('Should return status 400 if action is not provided', async () => {
@@ -97,7 +97,7 @@ describe('agencies handler', () => {
       const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.badRequest);
-      expect(response.body).toBe('');
+      expect(JSON.parse(response.body).response.errorMessage).toBe(MaxfriseErrorCodes.missingInfo.message);
     });
 
     it('Should return status 400 if action is not recognized', async () => {
@@ -106,7 +106,7 @@ describe('agencies handler', () => {
       const response = await handler(event, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.badRequest);
-      expect(response.body).toBe('');
+      expect(JSON.parse(response.body).response.errorMessage).toBe(MaxfriseErrorCodes.unrecognizedAction.message);
     });
   });
 
@@ -126,7 +126,7 @@ describe('agencies handler', () => {
       const response = await handler(mockedEvent, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.error);
-      expect(response.body).toBe('');
+      expect(JSON.parse(response.body).response.errorMessage).toBe(MaxfriseErrorCodes.errorFromDynamo.message);
       expect(console.error).toHaveBeenCalledTimes(2);
     });
 
@@ -135,7 +135,7 @@ describe('agencies handler', () => {
       const response = await handler(mockedEvent, mockedContext, () => undefined) as Response;
 
       expect(response.statusCode).toBe(StatusCodes.error);
-      expect(response.body).toBe('');
+      expect(JSON.parse(response.body).response.errorMessage).toBe(MaxfriseErrorCodes.errorFromDynamo.message);
       expect(console.error).toHaveBeenCalledTimes(1);
       expect(console.error).toHaveBeenCalledWith('Error on dynamo DB');
     });
