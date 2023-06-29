@@ -1,6 +1,6 @@
-import { StageEnvironment } from './environment';
+import { Stage } from './environment';
 
 export type Event<T> = {
   body: T,
-  environment: StageEnvironment
+  environment: Stage
 };

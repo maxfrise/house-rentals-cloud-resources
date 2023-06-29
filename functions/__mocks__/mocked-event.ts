@@ -1,7 +1,7 @@
 import { APIGatewayEvent } from "aws-lambda";
-import { StageEnvironment } from "../common";
+import { Stage } from "../common";
 
-export const getMockedEvent = (body: string, environment: StageEnvironment = 'test'): APIGatewayEvent => {
+export const getMockedEvent = (body: string, stage = Stage.TEST): APIGatewayEvent => {
   return {
     "resource": "/",
     "path": "/",
@@ -11,9 +11,7 @@ export const getMockedEvent = (body: string, environment: StageEnvironment = 'te
     "queryStringParameters": null,
     "multiValueQueryStringParameters": null,
     "pathParameters": null,
-    "stageVariables": {
-      environment
-    },
+    "stageVariables": {},
     "requestContext": {
       "authorizer": null,
       "resourceId": "2gxmpl",
@@ -24,7 +22,7 @@ export const getMockedEvent = (body: string, environment: StageEnvironment = 'te
       "path": "/Prod/",
       "accountId": "123456789012",
       "protocol": "HTTP/1.1",
-      "stage": "Prod",
+      "stage": stage,
       "domainPrefix": "70ixmpl4fl",
       "requestTimeEpoch": 1583798639428,
       "requestId": "77375676-xmpl-4b79-853a-f982474efe18",

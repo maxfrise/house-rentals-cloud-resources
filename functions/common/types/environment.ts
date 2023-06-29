@@ -1,1 +1,4 @@
-export type StageEnvironment = 'test' | 'prod';
+export enum Stage {
+  TEST = 'test',
+  PROD = 'prod'
+}

@@ -1,12 +1,12 @@
 import { handler } from "../src/index"
 import { mockClient } from 'aws-sdk-client-mock';
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import { Event } from '../../common';
+import { Event, Stage } from '../../common';
 import { PaymentCollectorRequest } from "../src/event";
 import { mockedContext } from '../../__mocks__';
 
 const event: Event<PaymentCollectorRequest> = {
-  environment: 'test',
+  environment: Stage.TEST,
   body: {
     pk: '123',
     sk: '234',
@@ -71,7 +71,7 @@ describe("paymentCollector", () => {
     mockDB('paymentJobs-prod', '123', '234')
     const result = await handler({
       ...event,
-      environment: 'prod'
+      environment: Stage.PROD
     }, mockedContext, () => undefined)
     expect(result).toMatchObject({
       body: "{\"message\":\"Rent collected successfully\"}",
