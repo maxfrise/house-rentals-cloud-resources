@@ -18,12 +18,8 @@ describe("paymentCollector", () => {
     ddbMock.on(QueryCommand, {
       TableName: tableName,
       ExpressionAttributeValues: {
-        ":pk": {
-          "S": pk
-        },
-        ":sk": {
-          "S": sk
-        }
+        ":pk": pk,
+        ":sk": sk
       }
     }).resolves({
       Items: [
