@@ -2,7 +2,7 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 
 import { ApiResponse, MaxfriseErrorCodes, Stage } from '../../../common';
-import { AgenciesRequest, AgenciesResponse } from "../types";
+import { AgenciesRequest, AgenciesResponse, AgencyStatus } from "../types";
 
 const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
@@ -18,7 +18,8 @@ export const addAgency = async (request: AgenciesRequest, environment: Stage): P
       owner: request.ownerId,
       address: request.address || "",
       name: request.name || "",
-      phone: request.phone || ""
+      phone: request.phone || "",
+      status: request.status || AgencyStatus.visible
     },
     TableName: tableName
   });
