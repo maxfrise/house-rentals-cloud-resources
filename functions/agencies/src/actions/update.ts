@@ -28,17 +28,13 @@ export const updateAgency = async (request: AgenciesRequest, environment: Stage)
       "#p": "phone"
     },
     ExpressionAttributeValues: {
-      ":address": { S: request.address },
-      ":name": { S: request.name },
-      ":phone": { S: request.phone },
+      ":address": request.address,
+      ":name": request.name,
+      ":phone": request.phone,
     },
     Key: {
-      pk: {
-        S: request.agencyId
-      },
-      st: {
-        S: request.ownerId
-      }
+      pk: request.agencyId,
+      st: request.ownerId
     },
     ReturnValues: "NONE",
     TableName: tableName,
