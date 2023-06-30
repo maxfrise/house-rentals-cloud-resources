@@ -31,7 +31,7 @@ resource "aws_iam_role" "iam_maxfrise_lambdas" {
                     "dynamodb:UpdateTable",
                     "dynamodb:GetRecords",
                     "dynamodb:DescribeImport",
-                    "dynamodb:DeleteItem",,
+                    "dynamodb:DeleteItem",
                     "dynamodb:CreateBackup",
                     "dynamodb:ConditionCheckItem",
                     "dynamodb:Query"
