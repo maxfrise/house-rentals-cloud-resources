@@ -2,7 +2,7 @@ import { Handler, APIGatewayEvent } from 'aws-lambda';
 
 import { AgenciesRequest, AgenciesResponse } from './types';
 import { ApiResponse, getEnv, MaxfriseErrorCodes } from '../../common';
-import { addAgency } from './actions';
+import { addAgency, updateAgency } from './actions';
 
 export const handler: Handler<APIGatewayEvent, ApiResponse<AgenciesResponse>> = async (event) => {
   if (!event.body) {
@@ -31,6 +31,8 @@ export const handler: Handler<APIGatewayEvent, ApiResponse<AgenciesResponse>> = 
 
   if (request.action === 'CREATE') {
     return await addAgency(request, environment);
+  } else if (request.action === 'UPDATE') {
+    return await updateAgency(request, environment);
   }
 
   return new ApiResponse<AgenciesResponse>(

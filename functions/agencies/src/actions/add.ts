@@ -14,21 +14,11 @@ export const addAgency = async (request: AgenciesRequest, environment: Stage): P
 
   const newItemCommand = new PutCommand({
     Item: {
-      agencyId: {
-        S: agencyId
-      },
-      owner: {
-        S: request.ownerId
-      },
-      address: {
-        S: request.address || ""
-      },
-      name: {
-        S: request.name || ""
-      },
-      phone: {
-        S: request.phone || ""
-      }
+      agencyId: agencyId,
+      owner: request.ownerId,
+      address: request.address || "",
+      name: request.name || "",
+      phone: request.phone || ""
     },
     TableName: tableName
   });
