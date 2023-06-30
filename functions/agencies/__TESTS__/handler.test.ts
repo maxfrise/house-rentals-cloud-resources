@@ -39,7 +39,7 @@ describe('agencies handler', () => {
     ddbMock.reset();
   });
 
-  describe('Add - Success', () => {
+  describe('Success', () => {
     it('Should execute creation correctly', async () => {
       const date = new Date(2000, 1, 1, 13)
       vi.setSystemTime(date);
