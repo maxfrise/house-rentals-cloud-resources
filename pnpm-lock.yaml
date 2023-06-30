@@ -50,6 +50,28 @@ importers:
 
   functions/agencies: {}
 
+  functions/initLease:
+    dependencies:
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.0
+    devDependencies:
+      '@aws-sdk/client-dynamodb':
+        specifier: ^3.360.0
+        version: 3.360.0
+      '@aws-sdk/lib-dynamodb':
+        specifier: ^3.360.0
+        version: 3.360.0(@aws-sdk/client-dynamodb@3.360.0)(@aws-sdk/smithy-client@3.360.0)(@aws-sdk/types@3.357.0)
+      '@aws-sdk/util-dynamodb':
+        specifier: ^3.360.0
+        version: 3.360.0
+      '@types/uuid':
+        specifier: ^9.0.2
+        version: 9.0.2
+      aws-sdk-client-mock:
+        specifier: ^2.2.0
+        version: 2.2.0
+
   functions/paymentCollector: {}
 
 packages:
@@ -1636,6 +1658,10 @@ packages:
 
   /@types/sinonjs__fake-timers@8.1.2:
     resolution: {integrity: sha512-9GcLXF0/v3t80caGs5p2rRfkB+a8VBGLJZVih6CNFkx8IZ994wiKKLSRs9nuFwk1HevWs/1mnUmkApGrSGsShA==}
+    dev: true
+
+  /@types/uuid@9.0.2:
+    resolution: {integrity: sha512-kNnC1GFBLuhImSnV7w4njQkUiJi0ZXUycu1rUaouPqiKlXkh77JKgdRnTAp1x5eBwcIwbtI+3otwzuIDEuDoxQ==}
     dev: true
 
   /@typescript-eslint/eslint-plugin@4.20.0(@typescript-eslint/parser@4.20.0)(eslint@7.32.0)(typescript@4.2.3):
@@ -3337,6 +3363,11 @@ packages:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
     dev: true
+
+  /uuid@9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
+    dev: false
 
   /v8-compile-cache@2.3.0:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}
