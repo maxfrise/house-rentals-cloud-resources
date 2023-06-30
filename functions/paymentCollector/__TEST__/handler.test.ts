@@ -1,18 +1,14 @@
 import { handler } from "../src/index"
 import { mockClient } from 'aws-sdk-client-mock';
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import { Event, Stage } from '../../common';
-import { PaymentCollectorRequest } from "../src/event";
-import { mockedContext } from '../../__mocks__';
+import { Stage } from '../../common';
+import { mockedContext, getMockedEvent } from '../../__mocks__';
 
-const event: Event<PaymentCollectorRequest> = {
-  environment: Stage.TEST,
-  body: {
-    pk: '123',
-    sk: '234',
-    details: 'cool details'
-  }
-}
+const event = getMockedEvent(JSON.stringify({
+  pk: '123',
+  sk: '234',
+  details: 'cool details'
+}));
 
 describe("paymentCollector", () => {
   const ddbMock = mockClient(DynamoDBDocumentClient);
@@ -71,7 +67,10 @@ describe("paymentCollector", () => {
     mockDB('paymentJobs-prod', '123', '234')
     const result = await handler({
       ...event,
-      environment: Stage.PROD
+      requestContext: {
+        ...event.requestContext,
+        stage: Stage.PROD
+      }
     }, mockedContext, () => undefined)
     expect(result).toMatchObject({
       body: "{\"message\":\"Rent collected successfully\"}",
@@ -80,6 +79,19 @@ describe("paymentCollector", () => {
       },
       isBase64Encoded: false,
       statusCode: 200,
+    });
+  })
+
+  it('should handle request with empty body', async () => {
+    const event = getMockedEvent('');
+    const result = await handler(event, mockedContext, () => undefined)
+    expect(result).toMatchObject({
+      body: "{\"message\":\"MISSING_INFO\"}",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      isBase64Encoded: false,
+      statusCode: 400,
     });
   })
 
