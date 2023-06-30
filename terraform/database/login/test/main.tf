@@ -26,32 +26,7 @@ resource "aws_dynamodb_table" "login_test" {
   }
 
   attribute {
-    name = "location"
-    type = "S"
-  }
-
-  attribute {
-    name = "method"
-    type = "S"
-  }
-
-  attribute {
-    name = "device"
-    type = "S"
-  }
-
-  attribute {
     name = "status"
-    type = "S"
-  }
-
-  attribute {
-    name = "recognizedDevice"
-    type = "S"
-  }
-
-  attribute {
-    name = "expirationDate"
     type = "S"
   }
 }
