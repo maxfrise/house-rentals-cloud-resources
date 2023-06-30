@@ -2,7 +2,7 @@ import { Handler, APIGatewayEvent } from 'aws-lambda';
 
 import { AgenciesRequest, AgenciesResponse } from './types';
 import { ApiResponse, getEnv, MaxfriseErrorCodes } from '../../common';
-import { addAgency, updateAgency } from './actions';
+import { addAgency, updateAgency, updateAgencyStatus } from './actions';
 
 export const handler: Handler<APIGatewayEvent, ApiResponse<AgenciesResponse>> = async (event) => {
   if (!event.body) {
@@ -15,10 +15,11 @@ export const handler: Handler<APIGatewayEvent, ApiResponse<AgenciesResponse>> = 
       }
     );
   }
+
   const environment = getEnv(event.requestContext.stage);
   const request = JSON.parse(event.body) as AgenciesRequest;
 
-  if (!request.action || !request.ownerId) {
+  if (!request.action || !request.ownerId) { // TODO: Add is signedIn() check
     return new ApiResponse<AgenciesResponse>(
       MaxfriseErrorCodes.missingInfo.code,
       {
@@ -33,6 +34,8 @@ export const handler: Handler<APIGatewayEvent, ApiResponse<AgenciesResponse>> = 
     return await addAgency(request, environment);
   } else if (request.action === 'UPDATE') {
     return await updateAgency(request, environment);
+  } else if (request.action === 'STATUS') {
+    return await updateAgencyStatus(request, environment);
   }
 
   return new ApiResponse<AgenciesResponse>(
