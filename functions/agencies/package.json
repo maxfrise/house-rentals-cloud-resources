@@ -7,9 +7,9 @@
   "type": "module",
   "scripts": {
     "test": "tsc && eslint && vitest run --coverage",
+    "test:watch": "vitest",
     "prebuild": "rm -rf dist",
-    "build": "esbuild src/index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
-    "postbuild": "cd dist && zip -r index.zip index.js* && rm -rf index.js index.js.map"
+    "build": "esbuild src/index.ts --bundle --sourcemap --external:@aws-sdk/* --platform=node --target=es2020 --outfile=dist/index.js"
   },
   "keywords": [],
   "author": "",
