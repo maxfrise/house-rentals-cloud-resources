@@ -22,6 +22,11 @@ export const updateAgency = async (request: AgenciesRequest, environment: Stage)
   }
 
   const updateItemCommand = new UpdateCommand({
+    ExpressionAttributeNames: {
+      "#n": "name",
+      "#a": "address",
+      "#p": "phone"
+    },
     ExpressionAttributeValues: {
       ":address": { S: request.address },
       ":name": { S: request.name },
@@ -37,7 +42,7 @@ export const updateAgency = async (request: AgenciesRequest, environment: Stage)
     },
     ReturnValues: "NONE",
     TableName: tableName,
-    UpdateExpression: "SET address = :address, name = :name, phone = :phone",
+    UpdateExpression: "SET #a = :address, #n = :name, #p = :phone",
   });
 
   let result;
