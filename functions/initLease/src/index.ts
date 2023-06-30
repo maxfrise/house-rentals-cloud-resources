@@ -2,9 +2,8 @@ import { APIGatewayEvent, Handler } from 'aws-lambda';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { v4 as uuidv4 } from 'uuid';
-import type { InitLeaseRequest, LandLord, Tenant, Responsebody } from './event'
 import { StatusCodes, ApiResponse, getEnv, Stage, MaxfriseErrorCodes } from '../../common';
-import { PROPERTY_STATUS } from './types'
+import { PROPERTY_STATUS, InitLeaseRequest, LandLord, Tenant, Responsebody } from "./types"
 
 const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
