@@ -1,49 +1,67 @@
-import { DynamoDBClient, QueryCommand, PutItemCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import { APIGatewayEvent, Handler } from 'aws-lambda';
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, QueryCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { v4 as uuidv4 } from 'uuid';
-import type { Event, LandLord, Tenant } from './event'
+import type { InitLeaseRequest, LandLord, Tenant, Responsebody } from './event'
+import { StatusCodes, ApiResponse, getEnv, Stage, MaxfriseErrorCodes } from '../../common';
 
 const client = new DynamoDBClient({ region: "us-west-2" });
+const ddb = DynamoDBDocumentClient.from(client);
 
-export const handler = async (event: Event) => {
-  const housesTableName = event.environment === "prod" ? 'houses-prod' : 'houses'
-  const paymentJobsTableName = event.environment === "prod" ? 'paymentJobs-prod' : 'paymentJobs'
-  const body = event.body
-  const { isUserOwner, houseAvailable } = await validateHouse(body.user, body.houseid, housesTableName)
+export const handler: Handler<APIGatewayEvent, ApiResponse<InitLeaseRequest>> = async (event) => {
+  if (!event.body) return new ApiResponse<Responsebody>(StatusCodes.badRequest, { message: MaxfriseErrorCodes.missingInfo.message })
+  const body = JSON.parse(event.body) as InitLeaseRequest
+  const environment = getEnv(event.requestContext.stage)
+  const housesTableName = environment === Stage.PROD ? 'houses-prod' : 'houses'
+  const paymentJobsTableName = environment === Stage.PROD ? 'paymentJobs-prod' : 'paymentJobs'
+  let isUserOwner = false
+  let houseAvailable = false
+  let jobsCreated
+
+  try {
+    const result = await validateHouse(body.user, body.houseid, housesTableName)
+    isUserOwner = result.isUserOwner
+    houseAvailable = result.houseAvailable
+  } catch (error) {
+    return new ApiResponse<Responsebody>(StatusCodes.badRequest, { message: (error as Error).message })
+  }
 
   if (!isUserOwner) {
-    throw new Error("The user is not the owner of the house")
+    return new ApiResponse<Responsebody>(StatusCodes.badRequest, { message: 'The user is not the owner of the house' })
   }
 
   if (!houseAvailable) {
-    throw new Error("The house is not avaible to be leased")
+    return new ApiResponse<Responsebody>(StatusCodes.badRequest, { message: 'The house is not avaible to be leased' })
   }
 
-  const jobsCreated = await createJobs(
-    body.startDate,
-    body.term,
-    body.houseid,
-    body.rentAmount,
-    body.landlords,
-    body.tenants,
-    paymentJobsTableName
-  )
+  try {
+    jobsCreated = await createJobs(
+      body.startDate,
+      body.term,
+      body.houseid,
+      body.rentAmount,
+      body.landlords,
+      body.tenants,
+      paymentJobsTableName
+    )
+  } catch (error) {
+    return new ApiResponse<Responsebody>(StatusCodes.badRequest, { message: (error as Error).message })
+  }
+
 
   await updateHouseStatus(body.user, body.houseid, housesTableName)
 
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
+  return new ApiResponse<Responsebody>(StatusCodes.ok,
+    {
+      message: "Lease initialized",
       isUserOwner,
       houseAvailable,
       jobsCreated: jobsCreated.length
-    }),
-  };
-  return response;
+    }
+  )
 };
 
 async function validateHouse(user: string, houseid: string, tableName: string) {
-  // TODO: validate that the house is not leased
   let itemsFound = 0
   let houseAvailable = true
   /**
@@ -57,19 +75,19 @@ async function validateHouse(user: string, houseid: string, tableName: string) {
       "#PK": "landlord",
       "#SK": "houseId"
     },
-    ExpressionAttributeValues: marshall({
+    ExpressionAttributeValues: {
       ":pk": `email#${user}`,
       ":sk": `house#${houseid}`
-    }),
+    },
   };
 
   try {
     const command = new QueryCommand(params);
-    const data = await client.send(command);
-    houseAvailable = data.Items.map((item) => unmarshall(item))[0]?.leaseStatus === "AVAILABLE"
-    itemsFound = data.Count
+    const data = await ddb.send(command)
+    houseAvailable = data?.Items?.[0].leaseStatus === "AVAILABLE"
+    itemsFound = data?.Items?.length || 0
   } catch (error) {
-    console.log(error);
+    throw new Error((error as Error).message)
   }
 
   return Promise.resolve({
@@ -90,36 +108,23 @@ async function createJobs(
   return Promise.all(getJobDates(startDate, term).map(async (jobDate) => {
     const input = {
       "Item": {
-        "pk": {
-          "S": `p#${jobDate}`
-        },
-        "st": {
-          "S": `${houseid}|${jobDate}|${uuidv4()}`
-        },
-        "details": {
-          "L": marshall([{ amount: rentAmount }])
-        },
+        "pk": `p#${jobDate}`,
+        "st": `${houseid}|${jobDate}|${uuidv4()}`,
+        "details": [{ amount: rentAmount }],
         "houseid": {
           "S": houseid
         },
-        "landlords": {
-          "L": marshall(landlords)
-        },
-        "tenants": {
-          "L": marshall(tenants)
-        },
-        "status": {
-          "S": "NOT_DUE"
-        }
+        "landlords": landlords,
+        "tenants": tenants,
+        "status": 'NOT_DUE'
       },
       "TableName": tableName
     };
-    const command = new PutItemCommand(input)
     try {
-      return await client.send(command);
-    } catch (e) {
-      console.log("Error updating the items")
-      return Promise.reject(e)
+      const command = new PutCommand(input)
+      return await ddb.send(command);
+    } catch (error) {
+      throw new Error((error as Error).message)
     }
   }))
 }
@@ -156,19 +161,18 @@ async function updateHouseStatus(user: string, houseid: string, tableName: strin
   const input = {
     TableName: tableName,
     Key: {
-      "landlord": { S: `email#${user}` },
-      "houseId": { S: `house#${houseid}` }
+      "landlord": `email#${user}`,
+      "houseId": `house#${houseid}`
     },
     UpdateExpression: "SET leaseStatus = :newValue",
     ExpressionAttributeValues: {
       ":newValue": { S: "LEASED" }
     }
   };
-  const command = new UpdateItemCommand(input)
   try {
-    return await client.send(command);
+    const command = new UpdateCommand(input)
+    return await ddb.send(command);
   } catch (e) {
-    console.log("Error updating the items")
     return Promise.reject(e)
   }
 }

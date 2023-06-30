@@ -1,6 +1,5 @@
 import { APIGatewayEvent, Handler } from 'aws-lambda';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { marshall } from "@aws-sdk/util-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { StatusCodes, ApiResponse, getEnv, Stage, MaxfriseErrorCodes } from '../../common';
 import type { PaymentCollectorRequest, Responsebody } from "./event";
@@ -24,20 +23,12 @@ export const handler: Handler<APIGatewayEvent, ApiResponse<PaymentCollectorReque
       "#DT": "details"
     },
     "ExpressionAttributeValues": {
-      ":s": {
-        "S": "PAID"
-      },
-      ":dt": {
-        "M": marshall(body.details)
-      }
+      ":s": "PAID",
+      ":dt": body.details
     },
     "Key": {
-      "pk": {
-        "S": body.pk
-      },
-      "st": {
-        "S": body.sk
-      }
+      "pk": body.pk,
+      "st": body.sk
     },
     "ReturnValues": "ALL_NEW",
     "TableName": tableName,
@@ -59,12 +50,8 @@ async function paymentExist(pk: string, sk: string, tableName: string) {
   let exist = false
   const input = {
     "ExpressionAttributeValues": {
-      ":pk": {
-        "S": pk
-      },
-      ":sk": {
-        "S": sk
-      }
+      ":pk": pk,
+      ":sk": sk
     },
     "KeyConditionExpression": "pk = :pk AND st = :sk",
     "TableName": tableName

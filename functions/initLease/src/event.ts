@@ -8,17 +8,19 @@ export type Tenant = {
   phone: string
 }
 
-type Body = {
+export type InitLeaseRequest = {
   user: string;
   houseid: string;
   startDate: string;
   term: string;
   rentAmount: string;
-  landlords: LandLord[]
-  tenants: Tenant[]
+  landlords: LandLord[];
+  tenants: Tenant[];
 }
 
-export type Event = {
-  body: Body;
-  environment: string;
+export type Responsebody = {
+  message: string;
+  isUserOwner?: boolean;
+  houseAvailable?: boolean;
+  jobsCreated?: number;
 }
