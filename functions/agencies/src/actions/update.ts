@@ -8,7 +8,6 @@ const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
 
 export const updateAgency = async (request: AgenciesRequest, environment: Stage): Promise<ApiResponse<AgenciesResponse>> => {
-  console.log('UPDATE');
   const tableName = environment === "prod" ? "agencies-prod-table" : "agencies-test-table";
 
   if (!request.agencyId || !request.ownerId) {
