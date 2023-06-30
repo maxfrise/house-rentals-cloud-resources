@@ -54,4 +54,9 @@ resource "aws_dynamodb_table" "login_test" {
     name = "recognizedDevice"
     type = "S"
   }
+
+  attribute {
+    name = "expirationDate"
+    type = "S"
+  }
 }
