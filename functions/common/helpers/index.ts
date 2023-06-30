@@ -1,1 +1,1 @@
-export * from './parse-stage-variables';
+export * from './get-env';

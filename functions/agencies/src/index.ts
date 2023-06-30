@@ -1,7 +1,7 @@
 import { Handler, APIGatewayEvent } from 'aws-lambda';
 
 import { AgenciesRequest, AgenciesResponse } from './types';
-import { ApiResponse, parseStageVariables, MaxfriseErrorCodes } from '../../common';
+import { ApiResponse, getEnv, MaxfriseErrorCodes } from '../../common';
 import { addAgency } from './actions';
 
 export const handler: Handler<APIGatewayEvent, ApiResponse<AgenciesResponse>> = async (event) => {
@@ -15,7 +15,7 @@ export const handler: Handler<APIGatewayEvent, ApiResponse<AgenciesResponse>> = 
       }
     );
   }
-  const environment = parseStageVariables(event.stageVariables?.environment);
+  const environment = getEnv(event.requestContext.stage);
   const request = JSON.parse(event.body) as AgenciesRequest;
 
   if (!request.action || !request.ownerId) {

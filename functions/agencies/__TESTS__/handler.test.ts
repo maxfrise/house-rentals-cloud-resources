@@ -3,7 +3,7 @@ import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { vi } from 'vitest';
 
 import { handler } from '../src';
-import { MaxfriseErrorCodes, Response, StatusCodes } from '../../common';
+import { MaxfriseErrorCodes, Response, Stage, StatusCodes } from '../../common';
 import { AgenciesRequest } from '../src/types';
 import { getMockedEvent, mockedContext } from '../../__mocks__/';
 
@@ -76,7 +76,7 @@ describe('agencies handler', () => {
 
       mockDB('agencies-prod-table');
 
-      const event = getMockedEvent(JSON.stringify(mockedBodyRequest), 'prod');
+      const event = getMockedEvent(JSON.stringify(mockedBodyRequest), Stage.PROD);
 
       const response = await handler(event, mockedContext, () => undefined) as Response;
 

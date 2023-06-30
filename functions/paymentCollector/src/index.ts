@@ -1,16 +1,18 @@
-import { Handler, } from 'aws-lambda';
+import { APIGatewayEvent, Handler } from 'aws-lambda';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import { Event, Response, StatusCodes, ApiResponse } from '../../common';
+import { StatusCodes, ApiResponse, getEnv, Stage, MaxfriseErrorCodes } from '../../common';
 import type { PaymentCollectorRequest, Responsebody } from "./event";
 
 const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
 
-export const handler: Handler<Event<PaymentCollectorRequest>, Response> = async (event) => {
-  const body = event.body
-  const tableName = event.environment === "prod" ? "paymentJobs-prod" : "paymentJobs"
+export const handler: Handler<APIGatewayEvent, ApiResponse<PaymentCollectorRequest>> = async (event) => {
+  if (!event.body) return new ApiResponse<Responsebody>(StatusCodes.badRequest, { message: MaxfriseErrorCodes.missingInfo.message })
+  const body = JSON.parse(event.body) as PaymentCollectorRequest
+  const environment = getEnv(event.requestContext.stage)
+  const tableName = environment === Stage.PROD ? "paymentJobs-prod" : "paymentJobs"
 
   if (!await paymentExist(body.pk, body.sk, tableName)) {
     return new ApiResponse<Responsebody>(StatusCodes.notFound, { message: 'payment not found' })
@@ -47,7 +49,7 @@ export const handler: Handler<Event<PaymentCollectorRequest>, Response> = async 
   try {
     await ddb.send(command)
   } catch (error) {
-    return new ApiResponse<Responsebody>(StatusCodes.error, {  message: (error as Error).message })
+    return new ApiResponse<Responsebody>(StatusCodes.error, { message: (error as Error).message })
   }
 
   return new ApiResponse<Responsebody>(StatusCodes.ok, { message: "Rent collected successfully" })
