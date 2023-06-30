@@ -29,6 +29,14 @@ module "dynamoDB_agencies_prod_table" {
   source = "./terraform/database/agencies-prod-table"
 }
 
+module "dynamoDB_login_prod_table" {
+  source = "./terraform/database/login/prod"
+}
+
+module "dynamoDB_login_test_table" {
+  source = "./terraform/database/login/test"
+}
+
 module "iam_maxfrise_lambdas" {
   source = "./terraform/certs/lambdas"
 }
