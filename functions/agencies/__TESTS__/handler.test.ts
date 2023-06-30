@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 
 import { handler } from '../src';
 import { MaxfriseErrorCodes, Response, Stage, StatusCodes } from '../../common';
-import { AgenciesRequest } from '../src/types';
+import { AgenciesRequest, AgencyStatus } from '../src/types';
 import { getMockedEvent, mockedContext } from '../../__mocks__/';
 
 const mockedBodyRequest: AgenciesRequest = {
@@ -56,6 +56,17 @@ describe('agencies handler', () => {
 
     it('Should execute update correctly', async () => {
       const request = { ...mockedBodyRequest, action: 'UPDATE', agencyId: 'agencyId' };
+      mockDB('agencies-test-table');
+
+      const event = getMockedEvent(JSON.stringify(request));
+
+      const response = await handler(event, mockedContext, () => undefined) as Response;
+
+      expect(response.statusCode).toBe(StatusCodes.ok);
+    });
+
+    it('Should execute update STATUS correctly', async () => {
+      const request = { ...mockedBodyRequest, action: 'STATUS', agencyId: 'agencyId', status: AgencyStatus.visible };
       mockDB('agencies-test-table');
 
       const event = getMockedEvent(JSON.stringify(request));
