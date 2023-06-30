@@ -18,7 +18,7 @@ export const addAgency = async (request: AgenciesRequest, environment: Stage): P
       owner: request.ownerId,
       address: request.address || "",
       name: request.name || "",
-      phone: request.phone
+      phone: request.phone || ""
     },
     TableName: tableName
   });
