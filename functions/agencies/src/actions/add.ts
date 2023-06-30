@@ -10,7 +10,7 @@ const ddb = DynamoDBDocumentClient.from(client);
 export const addAgency = async (request: AgenciesRequest, environment: Stage): Promise<ApiResponse<AgenciesResponse>> => {
   const tableName = environment === "prod" ? "agencies-prod-table" : "agencies-test-table";
   const date = new Date();
-  const agencyId = `${date.getTime()}-${request.ownerId}`;
+  const agencyId = `${date.getTime()}-${request.ownerId}`.toString();
 
   const newItemCommand = new PutCommand({
     Item: {
