@@ -41,11 +41,6 @@ resource "aws_dynamodb_table" "login_test" {
   }
 
   attribute {
-    name = "recognizedDevice"
-    type = "S"
-  }
-
-  attribute {
     name = "status"
     type = "S"
   }
