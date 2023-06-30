@@ -33,8 +33,8 @@ export const updateAgency = async (request: AgenciesRequest, environment: Stage)
       ":phone": request.phone,
     },
     Key: {
-      pk: request.agencyId,
-      st: request.ownerId
+      agencyId: request.agencyId,
+      owner: request.ownerId
     },
     ReturnValues: "NONE",
     TableName: tableName,
