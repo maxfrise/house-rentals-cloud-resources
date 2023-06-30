@@ -39,7 +39,7 @@ describe('agencies handler', () => {
     ddbMock.reset();
   });
 
-  describe('Success', () => {
+  describe('Add - Success', () => {
     it('Should execute creation correctly', async () => {
       const date = new Date(2000, 1, 1, 13)
       vi.setSystemTime(date);
@@ -52,6 +52,17 @@ describe('agencies handler', () => {
 
       expect(response.statusCode).toBe(StatusCodes.ok);
       expect(JSON.parse(response.body).response.agencyId).toBe(`${date.getTime()}-${mockedBodyRequest.ownerId}`);
+    });
+
+    it('Should execute update correctly', async () => {
+      const request = { ...mockedBodyRequest, action: 'UPDATE', agencyId: 'agencyId' };
+      mockDB('agencies-test-table');
+
+      const event = getMockedEvent(JSON.stringify(request));
+
+      const response = await handler(event, mockedContext, () => undefined) as Response;
+
+      expect(response.statusCode).toBe(StatusCodes.ok);
     });
 
     it('Should execute creation correctly when optional values are not present', async () => {
