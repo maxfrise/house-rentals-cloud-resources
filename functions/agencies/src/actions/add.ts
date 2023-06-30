@@ -1,7 +1,7 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 
-import { ApiResponse, Event, MaxfriseErrorCodes, Stage } from '../../../common';
+import { ApiResponse, MaxfriseErrorCodes, Stage } from '../../../common';
 import { AgenciesRequest, AgenciesResponse } from "../types";
 
 const client = new DynamoDBClient({ region: "us-west-2" });
