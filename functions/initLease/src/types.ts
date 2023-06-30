@@ -1,0 +1,4 @@
+export enum PROPERTY_STATUS {
+  LEASED = "LEASED",
+  AVAILABLE = "AVAILABLE"
+}

@@ -28,7 +28,7 @@ const getEvent = (user = 'Eldon_Lesch0@example.com') => getMockedEvent(JSON.stri
   ]
 }));
 
-describe("initLease", () => {
+describe("initLease handler", () => {
   const ddbMock = mockClient(DynamoDBDocumentClient);
 
   function mockDB(
@@ -40,14 +40,14 @@ describe("initLease", () => {
   ) {
 
     if (rejectsQuery) {
-      return ddbMock.on(QueryCommand).rejects('Error saving data in DB')
+      return ddbMock.on(QueryCommand).rejects()
     }
 
     if (rejectsPut) {
       return ddbMock
         .on(QueryCommand)
         .resolves({ Items: [{ leaseStatus }] })
-        .on(PutCommand).rejects('Error updating data in DB')
+        .on(PutCommand).rejects()
     }
 
     if (rejectsUpdate) {
@@ -55,7 +55,7 @@ describe("initLease", () => {
         .on(QueryCommand)
         .resolves({ Items: [{ leaseStatus }] })
         .on(UpdateCommand)
-        .rejects('Error updating house status')
+        .rejects()
     }
 
     ddbMock.on(QueryCommand, {
@@ -102,115 +102,131 @@ describe("initLease", () => {
     ddbMock.reset();
   })
 
-  it('should init lease', async () => {
-    mockDB()
-    const result = await handler(getEvent(), mockedContext, () => undefined)
-    expect(result).toMatchObject({
-      body: "{\"message\":\"Lease initialized\",\"isUserOwner\":true,\"houseAvailable\":true,\"jobsCreated\":12}",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      isBase64Encoded: false,
-      statusCode: 200,
-    });
+  describe('success', () => {
+    it('should init lease', async () => {
+      mockDB()
+      const result = await handler(getEvent(), mockedContext, () => undefined)
+      expect(result).toMatchObject({
+        body: "{\"message\":\"Lease initialized\",\"isUserOwner\":true,\"houseAvailable\":true,\"jobsCreated\":12}",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        isBase64Encoded: false,
+        statusCode: 200,
+      });
+    })
+
+    it('should init lease in prod', async () => {
+      mockDB('houses-prod')
+      const event = getEvent()
+      const result = await handler({
+        ...event,
+        requestContext: {
+          ...event.requestContext,
+          stage: Stage.PROD
+        }
+      }, mockedContext, () => undefined)
+      expect(result).toMatchObject({
+        body: "{\"message\":\"Lease initialized\",\"isUserOwner\":true,\"houseAvailable\":true,\"jobsCreated\":12}",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        isBase64Encoded: false,
+        statusCode: 200,
+      });
+    })
   })
 
-  it('should init lease in prod', async () => {
-    mockDB('houses-prod')
-    const event = getEvent()
-    const result = await handler({
-      ...event,
-      requestContext: {
-        ...event.requestContext,
-        stage: Stage.PROD
-      }
-    }, mockedContext, () => undefined)
-    expect(result).toMatchObject({
-      body: "{\"message\":\"Lease initialized\",\"isUserOwner\":true,\"houseAvailable\":true,\"jobsCreated\":12}",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      isBase64Encoded: false,
-      statusCode: 200,
-    });
+  describe('Error: Bad request', () => {
+    it('handles user not an owner of the house', async () => {
+      mockDB()
+      const result = await handler(getEvent('invalid'), mockedContext, () => undefined)
+      expect(result).toMatchObject({
+        body: "{\"message\":\"The user is not the owner of the house\"}",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        isBase64Encoded: false,
+        statusCode: 400,
+      });
+    })
+
+    it('handles house not available', async () => {
+      mockDB(undefined, 'LEASED')
+      const result = await handler(getEvent(), mockedContext, () => undefined)
+      expect(result).toMatchObject({
+        body: "{\"message\":\"The house is not avaible to be leased\"}",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        isBase64Encoded: false,
+        statusCode: 400,
+      });
+    })
+
+    it('handles request with empty body', async () => {
+      const event = getMockedEvent('');
+      const result = await handler(event, mockedContext, () => undefined)
+      expect(result).toMatchObject({
+        body: "{\"message\":\"MISSING_INFO\"}",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        isBase64Encoded: false,
+        statusCode: 400,
+      });
+    })
   })
 
-  it('handles user not an owner of the house', async () => {
-    mockDB()
-    const result = await handler(getEvent('invalid'), mockedContext, () => undefined)
-    expect(result).toMatchObject({
-      body: "{\"message\":\"The user is not the owner of the house\"}",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      isBase64Encoded: false,
-      statusCode: 400,
-    });
-  })
+  describe('Error: Server error', () => {
+    const errorLog = console.error;
 
-  it('handles house not available', async () => {
-    mockDB(undefined, 'LEASED')
-    const result = await handler(getEvent(), mockedContext, () => undefined)
-    expect(result).toMatchObject({
-      body: "{\"message\":\"The house is not avaible to be leased\"}",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      isBase64Encoded: false,
-      statusCode: 400,
-    });
-  })
+    beforeEach(() => {
+      console.error = vi.fn();
+    })
 
-  it('handles request with empty body', async () => {
-    const event = getMockedEvent('');
-    const result = await handler(event, mockedContext, () => undefined)
-    expect(result).toMatchObject({
-      body: "{\"message\":\"MISSING_INFO\"}",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      isBase64Encoded: false,
-      statusCode: 400,
-    });
-  })
+    afterEach(() => {
+      ddbMock.reset();
+      console.error = errorLog;
+    })
 
-  it('handles error validating house', async () => {
-    mockDB('houses', "AVAILABLE", true)
-    const result = await handler(getEvent(), mockedContext, () => undefined)
-    expect(result).toMatchObject({
-      body: "{\"message\":\"Error saving data in DB\"}",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      isBase64Encoded: false,
-      statusCode: 400,
-    });
-  })
+    it('handles error validating house', async () => {
+      mockDB('houses', "AVAILABLE", true)
+      const result = await handler(getEvent(), mockedContext, () => undefined)
+      expect(result).toMatchObject({
+        body: "{\"message\":\"DB_ERROR\"}",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        isBase64Encoded: false,
+        statusCode: 500,
+      });
+    })
 
-  it('handles error on creating jobs', async () => {
-    mockDB('houses', "AVAILABLE", false, true)
-    const result = await handler(getEvent(), mockedContext, () => undefined)
-    expect(result).toMatchObject({
-      body: "{\"message\":\"Error updating data in DB\"}",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      isBase64Encoded: false,
-      statusCode: 400,
-    });
-  })
+    it('handles error on creating jobs', async () => {
+      mockDB('houses', "AVAILABLE", false, true)
+      const result = await handler(getEvent(), mockedContext, () => undefined)
+      expect(result).toMatchObject({
+        body: "{\"message\":\"DB_ERROR\"}",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        isBase64Encoded: false,
+        statusCode: 500,
+      });
+    })
 
-  it('handles error updating house status', async () => {
-    mockDB('houses', "AVAILABLE", false, false, true)
-    const result = await handler(getEvent(), mockedContext, () => undefined)
-    expect(result).toMatchObject({
-      body: "{\"message\":\"Error updating house status\"}",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      isBase64Encoded: false,
-      statusCode: 400,
-    });
+    it('handles error updating house status', async () => {
+      mockDB('houses', "AVAILABLE", false, false, true)
+      const result = await handler(getEvent(), mockedContext, () => undefined)
+      expect(result).toMatchObject({
+        body: "{\"message\":\"DB_ERROR\"}",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        isBase64Encoded: false,
+        statusCode: 500,
+      });
+    })
   })
-
 });

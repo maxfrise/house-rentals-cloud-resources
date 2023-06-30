@@ -4,6 +4,7 @@ import { DynamoDBDocumentClient, QueryCommand, PutCommand, UpdateCommand } from 
 import { v4 as uuidv4 } from 'uuid';
 import type { InitLeaseRequest, LandLord, Tenant, Responsebody } from './event'
 import { StatusCodes, ApiResponse, getEnv, Stage, MaxfriseErrorCodes } from '../../common';
+import { PROPERTY_STATUS } from './types'
 
 const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
@@ -23,7 +24,11 @@ export const handler: Handler<APIGatewayEvent, ApiResponse<InitLeaseRequest>> = 
     isUserOwner = result.isUserOwner
     houseAvailable = result.houseAvailable
   } catch (error) {
-    return new ApiResponse<Responsebody>(StatusCodes.badRequest, { message: (error as Error).message })
+    console.error(error)
+    return new ApiResponse<Responsebody>(
+      MaxfriseErrorCodes.errorFromDynamo.code,
+      { message: MaxfriseErrorCodes.errorFromDynamo.message }
+    )
   }
 
   if (!isUserOwner) {
@@ -45,13 +50,21 @@ export const handler: Handler<APIGatewayEvent, ApiResponse<InitLeaseRequest>> = 
       paymentJobsTableName
     )
   } catch (error) {
-    return new ApiResponse<Responsebody>(StatusCodes.badRequest, { message: (error as Error).message })
+    console.error(error)
+    return new ApiResponse<Responsebody>(
+      MaxfriseErrorCodes.errorFromDynamo.code,
+      { message: MaxfriseErrorCodes.errorFromDynamo.message }
+    )
   }
 
   try {
     await updateHouseStatus(body.user, body.houseid, housesTableName)
   } catch (error) {
-    return new ApiResponse<Responsebody>(StatusCodes.badRequest, { message: (error as Error).message })
+    console.error(error)
+    return new ApiResponse<Responsebody>(
+      MaxfriseErrorCodes.errorFromDynamo.code,
+      { message: MaxfriseErrorCodes.errorFromDynamo.message }
+    )
   }
 
   return new ApiResponse<Responsebody>(StatusCodes.ok,
@@ -87,7 +100,7 @@ async function validateHouse(user: string, houseid: string, tableName: string) {
   try {
     const command = new QueryCommand(params);
     const data = await ddb.send(command)
-    houseAvailable = data?.Items?.[0].leaseStatus === "AVAILABLE"
+    houseAvailable = data?.Items?.[0].leaseStatus === PROPERTY_STATUS.AVAILABLE
     itemsFound = data?.Items?.length || 0
   } catch (error) {
     throw new Error((error as Error).message)
@@ -169,7 +182,7 @@ async function updateHouseStatus(user: string, houseid: string, tableName: strin
     },
     UpdateExpression: "SET leaseStatus = :newValue",
     ExpressionAttributeValues: {
-      ":newValue": { S: "LEASED" }
+      ":newValue": PROPERTY_STATUS.LEASED
     }
   };
   try {
