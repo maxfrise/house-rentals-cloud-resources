@@ -34,7 +34,7 @@ resource "aws_iam_role" "iam_maxfrise_lambdas" {
                     "dynamodb:DeleteItem",,
                     "dynamodb:CreateBackup",
                     "dynamodb:ConditionCheckItem",
-                    "dynamodb:Query",
+                    "dynamodb:Query"
                 ],
                 "Resource": "arn:aws:dynamodb:*:914036813947:table/*"
             },
@@ -46,7 +46,7 @@ resource "aws_iam_role" "iam_maxfrise_lambdas" {
                     "dynamodb:ListTables",
                     "dynamodb:ListBackups",
                     "dynamodb:ListImports",
-                    "dynamodb:ListExports"
+                    "dynamodb:ListExports
                 ],
                 "Resource": "*"
             }
