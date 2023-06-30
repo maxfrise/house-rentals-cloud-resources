@@ -48,8 +48,11 @@ export const handler: Handler<APIGatewayEvent, ApiResponse<InitLeaseRequest>> = 
     return new ApiResponse<Responsebody>(StatusCodes.badRequest, { message: (error as Error).message })
   }
 
-
-  await updateHouseStatus(body.user, body.houseid, housesTableName)
+  try {
+    await updateHouseStatus(body.user, body.houseid, housesTableName)
+  } catch (error) {
+    return new ApiResponse<Responsebody>(StatusCodes.badRequest, { message: (error as Error).message })
+  }
 
   return new ApiResponse<Responsebody>(StatusCodes.ok,
     {
@@ -172,7 +175,7 @@ async function updateHouseStatus(user: string, houseid: string, tableName: strin
   try {
     const command = new UpdateCommand(input)
     return await ddb.send(command);
-  } catch (e) {
-    return Promise.reject(e)
+  } catch (error) {
+    throw new Error((error as Error).message)
   }
 }

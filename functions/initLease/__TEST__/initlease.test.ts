@@ -31,7 +31,13 @@ const getEvent = (user = 'Eldon_Lesch0@example.com') => getMockedEvent(JSON.stri
 describe("initLease", () => {
   const ddbMock = mockClient(DynamoDBDocumentClient);
 
-  function mockDB(tableName: string = 'houses', leaseStatus = "AVAILABLE", rejectsQuery = false, rejectsPut = false) {
+  function mockDB(
+    tableName: string = 'houses',
+    leaseStatus = "AVAILABLE",
+    rejectsQuery = false,
+    rejectsPut = false,
+    rejectsUpdate = false
+  ) {
 
     if (rejectsQuery) {
       return ddbMock.on(QueryCommand).rejects('Error saving data in DB')
@@ -42,6 +48,14 @@ describe("initLease", () => {
         .on(QueryCommand)
         .resolves({ Items: [{ leaseStatus }] })
         .on(PutCommand).rejects('Error updating data in DB')
+    }
+
+    if (rejectsUpdate) {
+      return ddbMock
+        .on(QueryCommand)
+        .resolves({ Items: [{ leaseStatus }] })
+        .on(UpdateCommand)
+        .rejects('Error updating house status')
     }
 
     ddbMock.on(QueryCommand, {
@@ -121,7 +135,7 @@ describe("initLease", () => {
     });
   })
 
-  it('handle user not an owner of the house', async () => {
+  it('handles user not an owner of the house', async () => {
     mockDB()
     const result = await handler(getEvent('invalid'), mockedContext, () => undefined)
     expect(result).toMatchObject({
@@ -134,7 +148,7 @@ describe("initLease", () => {
     });
   })
 
-  it('handle house not available', async () => {
+  it('handles house not available', async () => {
     mockDB(undefined, 'LEASED')
     const result = await handler(getEvent(), mockedContext, () => undefined)
     expect(result).toMatchObject({
@@ -147,7 +161,7 @@ describe("initLease", () => {
     });
   })
 
-  it('handle request with empty body', async () => {
+  it('handles request with empty body', async () => {
     const event = getMockedEvent('');
     const result = await handler(event, mockedContext, () => undefined)
     expect(result).toMatchObject({
@@ -160,7 +174,7 @@ describe("initLease", () => {
     });
   })
 
-  it('handle error validating house', async () => {
+  it('handles error validating house', async () => {
     mockDB('houses', "AVAILABLE", true)
     const result = await handler(getEvent(), mockedContext, () => undefined)
     expect(result).toMatchObject({
@@ -178,6 +192,19 @@ describe("initLease", () => {
     const result = await handler(getEvent(), mockedContext, () => undefined)
     expect(result).toMatchObject({
       body: "{\"message\":\"Error updating data in DB\"}",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      isBase64Encoded: false,
+      statusCode: 400,
+    });
+  })
+
+  it('handles error updating house status', async () => {
+    mockDB('houses', "AVAILABLE", false, false, true)
+    const result = await handler(getEvent(), mockedContext, () => undefined)
+    expect(result).toMatchObject({
+      body: "{\"message\":\"Error updating house status\"}",
       headers: {
         "Content-Type": "application/json"
       },
