@@ -50,3 +50,16 @@ module "maxfrise_api_gateway" {
   agencies_function_name       = module.agencies_lambda.lambda_name
   agencies_function_invoke_arn = module.agencies_lambda.lambda_invoke_arn
 }
+
+module "aws_cognito_user_pool_simple" {
+  source = "lgallard/cognito-user-pool/aws"
+
+  user_pool_name = "test-pool"
+
+  tags = {
+    Owner       = "maxfrise"
+    Environment = "production"
+    Terraform   = true
+  }
+}
+
