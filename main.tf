@@ -84,7 +84,7 @@ module "maxfrise_user_pool" {
       generate_secret                      = true
       logout_urls                          = ["https://www.maxfrise.com/logout"]
       name                                 = "maxfrise_web_client"
-      read_attributes                      = ["email"]
+      read_attributes                      = ["email", "profile"]
       supported_identity_providers         = []
       write_attributes                     = ["email", "name"]
       access_token_validity                = 1
