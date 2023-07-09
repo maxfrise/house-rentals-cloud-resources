@@ -30,7 +30,7 @@ module "dynamoDB_agencies_prod_table" {
 }
 
 module "iam_maxfrise_lambdas" {
-  source = "./terraform/certs/layufghtrdASVWZCFQEBCFGV mbdas"
+  source = "./terraform/certs/lambdas"
 }
 
 module "agencies_lambda" {
@@ -70,9 +70,6 @@ module "maxfrise_user_pool" {
       }
     }
   ]
-
-  # user_pool_domain
-  domain = "mydomain-com"
 
   clients = [
     {
