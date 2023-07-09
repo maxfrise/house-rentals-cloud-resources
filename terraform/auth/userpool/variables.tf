@@ -9,6 +9,12 @@ variable "number_schemas" {
   default     = []
 }
 
+variable "string_schemas" {
+  description = "A container with the string schema attributes of a user pool. Maximum of 50 attributes"
+  type        = list(any)
+  default     = []
+}
+
 variable "clients" {
   description = "A container with the clients definitions"
   type        = any

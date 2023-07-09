@@ -36,5 +36,26 @@ resource "aws_cognito_user_pool" "users_pool" {
     }
   }
 
+  # schema (String)
+  dynamic "schema" {
+    for_each = var.string_schemas == null ? [] : var.string_schemas
+    content {
+      attribute_data_type      = lookup(schema.value, "attribute_data_type")
+      developer_only_attribute = lookup(schema.value, "developer_only_attribute")
+      mutable                  = lookup(schema.value, "mutable")
+      name                     = lookup(schema.value, "name")
+      required                 = lookup(schema.value, "required")
+
+      # string_attribute_constraints
+      dynamic "string_attribute_constraints" {
+        for_each = length(keys(lookup(schema.value, "string_attribute_constraints", {}))) == 0 ? [] : [lookup(schema.value, "string_attribute_constraints", {})]
+        content {
+          min_length = lookup(string_attribute_constraints.value, "min_length", null)
+          max_length = lookup(string_attribute_constraints.value, "max_length", null)
+        }
+      }
+    }
+  }
+
   tags = var.tags
 }
