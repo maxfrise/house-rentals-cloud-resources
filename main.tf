@@ -71,6 +71,34 @@ module "maxfrise_user_pool" {
     }
   ]
 
+
+  string_schemas = [
+    {
+      attribute_data_type      = "String"
+      developer_only_attribute = false
+      mutable                  = false
+      name                     = "email"
+      required                 = true
+
+      string_attribute_constraints = {
+        min_length = 7
+        max_length = 15
+      }
+    },
+    {
+      attribute_data_type      = "String"
+      developer_only_attribute = false
+      mutable                  = false
+      name                     = "name"
+      required                 = true
+
+      string_attribute_constraints = {
+        min_length = 7
+        max_length = 40
+      }
+    },
+  ]
+
   domain = "maxfrise"
 
   clients = [
