@@ -50,3 +50,31 @@ module "maxfrise_api_gateway" {
   agencies_function_name       = module.agencies_lambda.lambda_name
   agencies_function_invoke_arn = module.agencies_lambda.lambda_invoke_arn
 }
+
+module "maxfrise_user_pool" {
+  source = "./terraform/auth/userpool"
+
+  user_pool_name = "maxfrise_users"
+
+  number_schemas = [
+    {
+      attribute_data_type      = "Number"
+      developer_only_attribute = false
+      mutable                  = true
+      name                     = "number_of_properties"
+      required                 = false
+
+      number_attribute_constraints = {
+        min_value = 0
+        max_value = 500
+      }
+    }
+  ]
+
+  tags = {
+    Owner       = "maxfrise"
+    Environment = "production"
+    Terraform   = true
+  }
+}
+
