@@ -71,7 +71,6 @@ module "maxfrise_user_pool" {
     }
   ]
 
-
   string_schemas = [
     {
       attribute_data_type      = "String"
@@ -90,7 +89,7 @@ module "maxfrise_user_pool" {
       developer_only_attribute = false
       mutable                  = false
       name                     = "name"
-      required                 = true
+      required                 = false
 
       string_attribute_constraints = {
         min_length = 7
