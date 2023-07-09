@@ -71,7 +71,7 @@ module "maxfrise_user_pool" {
     }
   ]
 
-  domain = "www.maxfrise.com"
+  domain = "maxfrise"
 
   clients = [
     {
