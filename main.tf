@@ -52,7 +52,7 @@ module "maxfrise_api_gateway" {
 }
 
 module "maxfrise_user_pool" {
-  source = "./terraform/auth/usespool"
+  source = "./terraform/auth/userpool"
 
   user_pool_name = "maxfrise_users"
 
