@@ -71,6 +71,8 @@ module "maxfrise_user_pool" {
     }
   ]
 
+  domain = "www.maxfrise.com"
+
   clients = [
     {
       allowed_oauth_flows                  = ["code"]

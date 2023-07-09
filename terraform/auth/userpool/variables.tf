@@ -15,6 +15,18 @@ variable "clients" {
   default     = []
 }
 
+variable "domain" {
+  description = "Cognito User Pool domain"
+  type        = string
+  default     = null
+}
+
+variable "domain_certificate_arn" {
+  description = "The ARN of an issued ACM certificate in us-east-1 for a custom domain"
+  type        = string
+  default     = null
+}
+
 variable "tags" {
   description = "A mapping of tags to be assigned to the User Pool"
   type        = map(string)
