@@ -51,8 +51,8 @@ module "maxfrise_api_gateway" {
   agencies_function_invoke_arn = module.agencies_lambda.lambda_invoke_arn
 }
 
-module "aws_cognito_user_pool_simple" {
-  source = "./terraform/auth/userspool"
+module "maxfrise_user_pool" {
+  source = "./terraform/auth/usespool"
 
   user_pool_name = "maxfrise_users"
 
