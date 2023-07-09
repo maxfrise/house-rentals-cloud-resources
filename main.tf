@@ -51,74 +51,73 @@ module "maxfrise_api_gateway" {
   agencies_function_invoke_arn = module.agencies_lambda.lambda_invoke_arn
 }
 
-# module "maxfrise_user_pool" {
-#   source = "./terraform/auth/userpool"
+module "maxfrise_user_pool" {
+  source = "./terraform/auth/userpool"
 
-#   user_pool_name = "maxfrise_users"
+  user_pool_name = "maxfrise_users"
 
-#   number_schemas = [
-#     {
-#       attribute_data_type      = "Number"
-#       developer_only_attribute = false
-#       mutable                  = true
-#       name                     = "number_of_properties"
-#       required                 = false
+  number_schemas = [
+    {
+      attribute_data_type      = "Number"
+      developer_only_attribute = false
+      mutable                  = true
+      name                     = "number_of_properties"
+      required                 = false
 
-#       number_attribute_constraints = {
-#         min_value = 0
-#         max_value = 500
-#       }
-#     }
-#   ]
+      number_attribute_constraints = {
+        min_value = 0
+        max_value = 500
+      }
+    }
+  ]
 
-#   string_schemas = [
-#     {
-#       attribute_data_type      = "String"
-#       developer_only_attribute = false
-#       mutable                  = false
-#       name                     = "email"
-#       required                 = true // required attributes can only be se on pool creation
-#     },
-#     {
-#       attribute_data_type      = "String"
-#       developer_only_attribute = false
-#       mutable                  = false
-#       name                     = "name"
-#       required                 = true // required attributes can only be se on pool creation
-#     },
-#   ]
+  string_schemas = [
+    {
+      attribute_data_type      = "String"
+      developer_only_attribute = false
+      mutable                  = false
+      name                     = "email"
+      required                 = true // required attributes can only be se on pool creation
+    },
+    {
+      attribute_data_type      = "String"
+      developer_only_attribute = false
+      mutable                  = false
+      name                     = "name"
+      required                 = true // required attributes can only be se on pool creation
+    },
+  ]
 
-#   domain = "maxfrise"
+  domain = "maxfrise"
 
-#   clients = [
-#     {
-#       allowed_oauth_flows                  = ["code"]
-#       allowed_oauth_flows_user_pool_client = false
-#       allowed_oauth_scopes                 = ["email", "profile", "openid"]
-#       callback_urls                        = ["https://www.maxfrise.com/callback"]
-#       default_redirect_uri                 = "https://www.maxfrise.com/callback"
-#       explicit_auth_flows                  = []
-#       generate_secret                      = false
-#       logout_urls                          = ["https://www.maxfrise.com/logout"]
-#       name                                 = "maxfrise_web_client"
-#       read_attributes                      = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "picture", "email", "profile"]
-#       write_attributes                     = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "picture", "email", "profile"]
-#       supported_identity_providers         = ["COGNITO"]
-#       access_token_validity                = 1
-#       id_token_validity                    = 1
-#       refresh_token_validity               = 60
-#       token_validity_units = {
-#         access_token  = "hours"
-#         id_token      = "hours"
-#         refresh_token = "days"
-#       }
-#     }
-#   ]
+  clients = [
+    {
+      allowed_oauth_flows                  = ["code"]
+      allowed_oauth_flows_user_pool_client = false
+      allowed_oauth_scopes                 = ["email", "profile", "openid"]
+      callback_urls                        = ["https://www.maxfrise.com/callback"]
+      default_redirect_uri                 = "https://www.maxfrise.com/callback"
+      explicit_auth_flows                  = []
+      generate_secret                      = false
+      logout_urls                          = ["https://www.maxfrise.com/logout"]
+      name                                 = "maxfrise_web_client"
+      read_attributes                      = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "picture", "email", "profile"]
+      write_attributes                     = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "picture", "email", "profile"]
+      supported_identity_providers         = ["COGNITO"]
+      access_token_validity                = 1
+      id_token_validity                    = 1
+      refresh_token_validity               = 60
+      token_validity_units = {
+        access_token  = "hours"
+        id_token      = "hours"
+        refresh_token = "days"
+      }
+    }
+  ]
 
-#   tags = {
-#     Owner       = "maxfrise"
-#     Environment = "production"
-#     Terraform   = true
-#   }
-# }
-
+  tags = {
+    Owner       = "maxfrise"
+    Environment = "production"
+    Terraform   = true
+  }
+}
