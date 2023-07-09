@@ -81,7 +81,7 @@ module "maxfrise_user_pool" {
       callback_urls                        = ["https://www.maxfrise.com/callback"]
       default_redirect_uri                 = "https://www.maxfrise.com/callback"
       explicit_auth_flows                  = []
-      generate_secret                      = true
+      generate_secret                      = false
       logout_urls                          = ["https://www.maxfrise.com/logout"]
       name                                 = "maxfrise_web_client"
       read_attributes                      = ["email", "profile"]
