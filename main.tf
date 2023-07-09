@@ -30,7 +30,7 @@ module "dynamoDB_agencies_prod_table" {
 }
 
 module "iam_maxfrise_lambdas" {
-  source = "./terraform/certs/lambdas"
+  source = "./terraform/certs/layufghtrdASVWZCFQEBCFGV mbdas"
 }
 
 module "agencies_lambda" {
@@ -67,6 +67,34 @@ module "maxfrise_user_pool" {
       number_attribute_constraints = {
         min_value = 0
         max_value = 500
+      }
+    }
+  ]
+
+  # user_pool_domain
+  domain = "mydomain-com"
+
+  clients = [
+    {
+      allowed_oauth_flows                  = ["code"]
+      allowed_oauth_flows_user_pool_client = false
+      allowed_oauth_scopes                 = ["email", "profile", "openid"]
+      callback_urls                        = ["https://www.maxfrise.com/callback"]
+      default_redirect_uri                 = "https://www.maxfrise.com/callback"
+      explicit_auth_flows                  = []
+      generate_secret                      = true
+      logout_urls                          = ["https://www.maxfrise.com/logout"]
+      name                                 = "maxfrise_web_client"
+      read_attributes                      = ["email"]
+      supported_identity_providers         = []
+      write_attributes                     = ["email", "name"]
+      access_token_validity                = 1
+      id_token_validity                    = 1
+      refresh_token_validity               = 60
+      token_validity_units = {
+        access_token  = "hours"
+        id_token      = "hours"
+        refresh_token = "days"
       }
     }
   ]

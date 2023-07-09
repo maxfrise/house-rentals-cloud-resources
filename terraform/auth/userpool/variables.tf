@@ -9,6 +9,12 @@ variable "number_schemas" {
   default     = []
 }
 
+variable "clients" {
+  description = "A container with the clients definitions"
+  type        = any
+  default     = []
+}
+
 variable "tags" {
   description = "A mapping of tags to be assigned to the User Pool"
   type        = map(string)
