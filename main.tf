@@ -104,6 +104,7 @@ module "maxfrise_user_pool" {
       read_attributes                      = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "picture", "email", "profile"]
       write_attributes                     = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "picture", "email", "profile"]
       supported_identity_providers         = ["COGNITO"]
+      prevent_user_existence_errors        = "ENABLED"
       access_token_validity                = 1
       id_token_validity                    = 1
       refresh_token_validity               = 60
