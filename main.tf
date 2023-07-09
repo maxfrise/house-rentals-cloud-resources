@@ -78,6 +78,11 @@ module "maxfrise_user_pool" {
       mutable                  = false
       name                     = "email"
       required                 = true // required attributes can only be se on pool creation
+
+      string_attribute_constraints = {
+        min_length = 0
+        max_length = 2048
+      }
     },
     {
       attribute_data_type      = "String"
@@ -85,6 +90,11 @@ module "maxfrise_user_pool" {
       mutable                  = false
       name                     = "name"
       required                 = true // required attributes can only be se on pool creation
+
+      string_attribute_constraints = {
+        min_length = 0
+        max_length = 2048
+      }
     },
   ]
 
