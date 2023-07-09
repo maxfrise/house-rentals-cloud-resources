@@ -71,6 +71,31 @@ module "maxfrise_user_pool" {
     }
   ]
 
+  clients = [
+    {
+      allowed_oauth_flows                  = ["code"]
+      allowed_oauth_flows_user_pool_client = false
+      allowed_oauth_scopes                 = ["email", "profile", "openid"]
+      callback_urls                        = ["https://www.maxfrise.com/callback"]
+      default_redirect_uri                 = "https://www.maxfrise.com/callback"
+      explicit_auth_flows                  = []
+      generate_secret                      = true
+      logout_urls                          = ["https://www.maxfrise.com/logout"]
+      name                                 = "maxfrise_web_client"
+      read_attributes                      = ["email"]
+      supported_identity_providers         = []
+      write_attributes                     = ["email", "name"]
+      access_token_validity                = 1
+      id_token_validity                    = 1
+      refresh_token_validity               = 60
+      token_validity_units = {
+        access_token  = "hours"
+        id_token      = "hours"
+        refresh_token = "days"
+      }
+    }
+  ]
+
   tags = {
     Owner       = "maxfrise"
     Environment = "production"
