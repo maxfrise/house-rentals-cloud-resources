@@ -97,7 +97,7 @@ module "maxfrise_user_pool" {
       allowed_oauth_scopes                 = ["email", "profile", "openid"]
       callback_urls                        = ["https://www.maxfrise.com/callback"]
       default_redirect_uri                 = "https://www.maxfrise.com/callback"
-      explicit_auth_flows                  = []
+      explicit_auth_flows                  = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH"]
       generate_secret                      = false
       logout_urls                          = ["https://www.maxfrise.com/logout"]
       name                                 = "maxfrise_web_client"
