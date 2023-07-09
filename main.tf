@@ -97,13 +97,14 @@ module "maxfrise_user_pool" {
       allowed_oauth_scopes                 = ["email", "profile", "openid"]
       callback_urls                        = ["https://www.maxfrise.com/callback"]
       default_redirect_uri                 = "https://www.maxfrise.com/callback"
-      explicit_auth_flows                  = []
+      explicit_auth_flows                  = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH"]
       generate_secret                      = false
       logout_urls                          = ["https://www.maxfrise.com/logout"]
       name                                 = "maxfrise_web_client"
       read_attributes                      = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "picture", "email", "profile"]
       write_attributes                     = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "picture", "email", "profile"]
       supported_identity_providers         = ["COGNITO"]
+      prevent_user_existence_errors        = "ENABLED"
       access_token_validity                = 1
       id_token_validity                    = 1
       refresh_token_validity               = 60
