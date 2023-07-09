@@ -52,9 +52,24 @@ module "maxfrise_api_gateway" {
 }
 
 module "aws_cognito_user_pool_simple" {
-  source = "lgallard/cognito-user-pool/aws"
+  source = "./terraform/auth/userspool"
 
-  user_pool_name = "test-pool"
+  user_pool_name = "maxfrise_users"
+
+  number_schemas = [
+    {
+      attribute_data_type      = "Number"
+      developer_only_attribute = false
+      mutable                  = true
+      name                     = "number_of_properties"
+      required                 = false
+
+      number_attribute_constraints = {
+        min_value = 0
+        max_value = 500
+      }
+    }
+  ]
 
   tags = {
     Owner       = "maxfrise"
