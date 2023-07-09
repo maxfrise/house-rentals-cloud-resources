@@ -85,7 +85,7 @@ module "maxfrise_user_pool" {
       logout_urls                          = ["https://www.maxfrise.com/logout"]
       name                                 = "maxfrise_web_client"
       read_attributes                      = ["email"]
-      supported_identity_providers         = []
+      supported_identity_providers         = ["COGNITO"]
       write_attributes                     = ["email", "name"]
       access_token_validity                = 1
       id_token_validity                    = 1
