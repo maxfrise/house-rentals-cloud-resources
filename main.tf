@@ -111,8 +111,8 @@ module "maxfrise_user_pool" {
       generate_secret                      = false
       logout_urls                          = []
       name                                 = "maxfrise_web_client"
-      read_attributes                      = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "picture", "email", "profile"]
-      write_attributes                     = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "picture", "email", "profile"]
+      read_attributes                      = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "phone_number_verified", "picture", "email", "profile", "email_verified", "family_name", "gender", "given_name", "locale", "middle_name", "nickname", "preferred_username", "updated_at", "website", "zoneinfo"]
+      write_attributes                     = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "picture", "email", "profile", "family_name", "gender", "given_name", "locale", "middle_name", "nickname", "preferred_username", "updated_at", "website", "zoneinfo"]
       supported_identity_providers         = ["COGNITO"]
       prevent_user_existence_errors        = "ENABLED"
       access_token_validity                = 1
