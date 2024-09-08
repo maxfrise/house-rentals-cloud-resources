@@ -145,27 +145,49 @@ async function createJobs(
 }
 
 function getJobDates(startDate: string, term: string) {
-  const dates = [new Date(startDate)]; // initialize array with start date
+  const dates = [];
   let currDate = new Date(startDate)
+  currDate.setUTCHours(0, 0, 0, 0); // Set time to midnight
+
+  const originalFirstDay = currDate.getDate()
+
+  // Add the start date to the list
+  dates.push(currDate)
+
   let count = 1;
 
   while (count < parseInt(term)) {
-    // increment date by 1 month
-    currDate.setMonth(currDate.getMonth() + 1);
+    let nextDate = new Date(currDate);
     let daysAdded = 0
+    nextDate.setMonth(currDate.getMonth() + 1); // Move to the next month
+
+    // Ensure last day is always used
+    nextDate = new Date(nextDate.getFullYear(), nextDate.getMonth(), originalFirstDay)
+
+    const monthDiff = nextDate.getMonth() - currDate.getMonth()
+
+    // This check makes sure when moving to a month with less days than the original first day,
+    // the date gets adjusted, to use the last day available on the next month
+    if (monthDiff !== 1 && monthDiff !== -11) {
+      nextDate = new Date(nextDate.getFullYear(), nextDate.getMonth(), 0); // Set to last day of the new month
+    }
 
     // adjust date for weekends
-    if (currDate.getDay() === 6) { // if it's Saturday
-      currDate.setDate(currDate.getDate() + 2); // move to Monday
+    if (nextDate.getDay() === 6) { // if it's Saturday
+      nextDate.setDate(nextDate.getDate() + 2); // move to Monday
       daysAdded = 2
-    } else if (currDate.getDay() === 0) { // if it's Sunday
-      currDate.setDate(currDate.getDate() + 1); // move to Monday
+    } else if (nextDate.getDay() === 0) { // if it's Sunday
+      nextDate.setDate(nextDate.getDate() + 1); // move to Monday
       daysAdded = 1
     }
 
-    dates.push(new Date(currDate));
+    dates.push(new Date(nextDate));
+
     // Restore the days once added to the list
-    currDate.setDate(currDate.getDate() - daysAdded)
+    nextDate.setDate(nextDate.getDate() - daysAdded)
+
+    currDate = nextDate; // Update current date
+
     count++;
   }
 
