@@ -11,7 +11,6 @@ https://us-west-2.console.aws.amazon.com/lambda/home?region=us-west-2#/functions
 ### TODOS
 - [ ] Publish code to AWS
 - [ ] Create infra code for new API gateway
-- [ ] Create
 
 ### Lease entity - TODO
 Currently there is no lease entity that covers the overral contract of the lease, as part of the initializing proccess a new Lease entity should be created.
