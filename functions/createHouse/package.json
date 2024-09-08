@@ -1,0 +1,16 @@
+{
+  "name": "@maxfrise-cloud/createHouse",
+  "private": true,
+  "version": "0.0.1",
+  "description": "function that creates a house entity",
+  "main": "dist/index.js",
+  "scripts": {
+    "test:watch": "vitest",
+    "test": "tsc && eslint && vitest run --coverage",
+    "prebuild": "rm -rf dist",
+    "build": "esbuild src/index.ts --bundle --sourcemap --external:@aws-sdk/* --platform=node --target=es2020 --outfile=dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
