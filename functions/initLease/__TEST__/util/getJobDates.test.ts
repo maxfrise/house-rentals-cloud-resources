@@ -20,7 +20,7 @@ describe('getJobDates', () => {
     ])
   })
 
-  it('handles dates with 30th start date and feb', () => {
+  it('handles month boundary limits, using the last day of the month', () => {
     const dates = getJobDates("2024-01-31", "2")
     expect(dates).toStrictEqual([
       '2024-01-31T00:00:00.000Z',
