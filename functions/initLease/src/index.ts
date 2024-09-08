@@ -4,6 +4,7 @@ import { DynamoDBDocumentClient, QueryCommand, PutCommand, UpdateCommand } from 
 import { v4 as uuidv4 } from 'uuid';
 import { StatusCodes, ApiResponse, getEnv, Stage, MaxfriseErrorCodes } from '../../common';
 import { PROPERTY_STATUS, InitLeaseRequest, LandLord, Tenant, Responsebody } from "./types"
+import { getJobDates } from "./util/getJobDates"
 
 const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
@@ -142,34 +143,6 @@ async function createJobs(
       throw new Error((error as Error).message)
     }
   }))
-}
-
-function getJobDates(startDate: string, term: string) {
-  const dates = [new Date(startDate)]; // initialize array with start date
-  let currDate = new Date(startDate)
-  let count = 1;
-
-  while (count < parseInt(term)) {
-    // increment date by 1 month
-    currDate.setMonth(currDate.getMonth() + 1);
-    let daysAdded = 0
-
-    // adjust date for weekends
-    if (currDate.getDay() === 6) { // if it's Saturday
-      currDate.setDate(currDate.getDate() + 2); // move to Monday
-      daysAdded = 2
-    } else if (currDate.getDay() === 0) { // if it's Sunday
-      currDate.setDate(currDate.getDate() + 1); // move to Monday
-      daysAdded = 1
-    }
-
-    dates.push(new Date(currDate));
-    // Restore the days once added to the list
-    currDate.setDate(currDate.getDate() - daysAdded)
-    count++;
-  }
-
-  return dates.map((date) => date.toISOString()); // convert dates to ISO strings without time
 }
 
 async function updateHouseStatus(user: string, houseid: string, tableName: string) {
