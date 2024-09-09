@@ -9,7 +9,7 @@ import { createHouse } from './createHouse';
 const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
 
-export const handler: Handler<APIGatewayEvent, ApiResponse<Responsebody>> = async (event): Promise<ApiResponse<Responsebody>> => {
+export const handler: Handler<APIGatewayEvent, ApiResponse<Responsebody>> = async (event) => {
   const environment = getEnv(event.requestContext.stage)
   const tableName = environment === "prod" ? 'houses-prod' : 'houses'
 
