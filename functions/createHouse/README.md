@@ -68,23 +68,11 @@ curl --request POST \
 
 ```json
 {
-  "landlord": "email#audel91@gmail.com",
-  "houseId": "4567",
-	"houseFriendlyName": "houseInstaging",
-  "address": "las perlas 2012",
-  "details": "super nice house!",
-  "landlords": [
-    {
-      "name": "Yolanda",
-      "phone": "+15093120334"
-    }
-  ],
-  "leaseStatus": "AVAILABLE",
-  "tenants": [
-    {
-      "name": "Sergio",
-      "phone": "+523121186656"
-    }
-  ]
+	"$metadata": {
+		"httpStatusCode": 200,
+		"requestId": "D1QSIE223S811HVJDB0EVL2S83VV4KQNSO5AEMVJF66Q9ASUAAJG",
+		"attempts": 1,
+		"totalRetryDelay": 0
+	}
 }
 ```
