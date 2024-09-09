@@ -11,3 +11,80 @@ https://us-west-2.console.aws.amazon.com/lambda/home?region=us-west-2#/functions
 ### TODOS
 - [ ] Publish code to AWS
 - [ ] Create infra code for new API gateway
+
+## Sample curl
+```bash
+curl --request POST \
+  --url https://staging.api.maxfrise.com/createhouse \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "landlord": "email#audel91@gmail.com",
+  "houseId": "4567",
+	"houseFriendlyName": "houseInstaging",
+  "address": "las perlas 2012",
+  "details": "super nice house!",
+  "landlords": [
+    {
+      "name": "Yolanda",
+      "phone": "+15093120388"
+    }
+  ],
+  "leaseStatus": "AVAILABLE",
+  "tenants": [
+    {
+      "name": "Javier",
+      "phone": "+523121186644"
+    }
+  ]
+}'
+```
+
+## Sample event
+
+```json
+{
+  "landlord": "email#audel91@gmail.com",
+  "houseId": "4567",
+	"houseFriendlyName": "houseInstaging",
+  "address": "las perlas 2012",
+  "details": "super nice house!",
+  "landlords": [
+    {
+      "name": "Yolanda",
+      "phone": "+15093120388"
+    }
+  ],
+  "leaseStatus": "AVAILABLE",
+  "tenants": [
+    {
+      "name": "Sergio",
+      "phone": "+523121186644"
+    }
+  ]
+}
+```
+
+## Sample response
+
+```json
+{
+  "landlord": "email#audel91@gmail.com",
+  "houseId": "4567",
+	"houseFriendlyName": "houseInstaging",
+  "address": "las perlas 2012",
+  "details": "super nice house!",
+  "landlords": [
+    {
+      "name": "Yolanda",
+      "phone": "+15093120334"
+    }
+  ],
+  "leaseStatus": "AVAILABLE",
+  "tenants": [
+    {
+      "name": "Sergio",
+      "phone": "+523121186656"
+    }
+  ]
+}
+```
