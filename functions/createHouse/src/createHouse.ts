@@ -6,31 +6,6 @@ import { marshall } from "@aws-sdk/util-dynamodb";
 import { Body } from "./types"
 
 export const createHouse = async (body: Body, tableName: string, client: DynamoDBClient) => {
-
-  //   Item: {
-  //     houseId: {
-  //       S: body.houseId
-  //     },
-  //     landlord: {
-  //       S: body.landlord
-  //     },
-  //     address: {
-  //       S: body.address
-  //     },
-  //     details: {
-  //       S: body.details
-  //     },
-  //     leaseStatus: {
-  //       S: body.leaseStatus
-  //     },
-  //     houseFriendlyName: {
-  //       S: body.houseFriendlyName
-  //     },
-  //     tenants: { L: marshall(body.tenants) },
-  //     landlords: { L: marshall(body.landlords) }
-  //   }
-  // })
-  // This method, the client should be the one that supports it.
   const putItemCommand = new PutCommand({
     TableName: tableName,
     Item: {
