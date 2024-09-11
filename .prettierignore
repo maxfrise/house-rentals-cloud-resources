@@ -2,5 +2,7 @@
 build
 coverage
 
+pnpm-lock.yaml
+
 # Ignore terraform
 .tf
