@@ -2,8 +2,11 @@
   "name": "house-rentals-cloud-resources",
   "version": "1.0.0",
   "description": "Cloud resources workspace",
-  "main": "index.js",
+  "type": "module",
+  "private":"true",
   "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write .",
     "build": "pnpm run --parallel -r build",
     "clean": "rm -rf node_modules && rm -rf modules/**/node_modules && rm -rf dist/",
     "test": "pnpm run --parallel -r test"
