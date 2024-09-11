@@ -83,16 +83,14 @@ describe("get houses handler", async () => {
       () => undefined,
     );
 
-    if (result) {
-      expect(result!.statusCode).toBe(200);
-      expect(result!.body).toBe(
-        '{"houses":[{"houseId":"house#clhqcayfg000008mb78ug1z0t"}]}',
-      );
-      expect(result!.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result!.isBase64Encoded).toBe(false);
-    }
+    expect(result!.statusCode).toBe(200);
+    expect(result!.body).toBe(
+      '{"houses":[{"houseId":"house#clhqcayfg000008mb78ug1z0t"}]}',
+    );
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
   });
 
   it("handles not houses found", async () => {
@@ -115,14 +113,12 @@ describe("get houses handler", async () => {
 
     const result = await handler(getEvent(), mockedContext, () => undefined);
 
-    if (result) {
-      expect(result!.statusCode).toBe(404);
-      expect(result!.body).toBe('{"message":"NO_HOUSES"}');
-      expect(result!.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result!.isBase64Encoded).toBe(false);
-    }
+    expect(result!.statusCode).toBe(404);
+    expect(result!.body).toBe('{"message":"NO_HOUSES"}');
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
   });
 
   it("returns error on empty body", async () => {
@@ -151,15 +147,12 @@ describe("get houses handler", async () => {
       mockedContext,
       () => undefined,
     );
-
-    if (result) {
-      expect(result!.statusCode).toBe(500);
-      expect(result!.body).toBe('{"message":"EMPTY_BODY"}');
-      expect(result!.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result!.isBase64Encoded).toBe(false);
-    }
+    expect(result!.statusCode).toBe(500);
+    expect(result!.body).toBe('{"message":"EMPTY_BODY"}');
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
   });
 
   it("handles db errors", async () => {
@@ -174,18 +167,15 @@ describe("get houses handler", async () => {
       })
       .rejects("Something wrong happened");
     const result = await handler(getEvent(), mockedContext, () => undefined);
-
-    if (result) {
-      expect(result!.statusCode).toBe(404);
-      expect(result!.body).toBe('{"message":"NO_HOUSES"}');
-      expect(result!.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result!.isBase64Encoded).toBe(false);
-      expect(consoleSpy).toHaveBeenCalledOnce();
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Unexpected error while getting the houses, Error: Something wrong happened",
-      );
-    }
+    expect(result!.statusCode).toBe(404);
+    expect(result!.body).toBe('{"message":"NO_HOUSES"}');
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
+    expect(consoleSpy).toHaveBeenCalledOnce();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "Unexpected error while getting the houses, Error: Something wrong happened",
+    );
   });
 });
