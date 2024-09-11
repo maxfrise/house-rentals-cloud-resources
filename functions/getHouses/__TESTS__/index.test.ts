@@ -22,7 +22,6 @@ describe("get houses handler", async () => {
   });
 
   it("should get houses", async () => {
-    expect.assertions(4);
     ddbMock
       .on(QueryCommand, {
         TableName: "houses",
@@ -41,20 +40,17 @@ describe("get houses handler", async () => {
 
     const result = await handler(getEvent(), mockedContext, () => undefined);
 
-    if (result) {
-      expect(result!.statusCode).toBe(200);
-      expect(result!.body).toBe(
-        '{"houses":[{"houseId":"house#clhqcayfg000008mb78ug1z0t"}]}',
-      );
-      expect(result!.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result!.isBase64Encoded).toBe(false);
-    }
+    expect(result!.statusCode).toBe(200);
+    expect(result!.body).toBe(
+      '{"houses":[{"houseId":"house#clhqcayfg000008mb78ug1z0t"}]}',
+    );
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
   });
 
   it("should get houses from prod", async () => {
-    expect.assertions(4);
     const event = getEvent();
     ddbMock
       .on(QueryCommand, {
@@ -83,20 +79,17 @@ describe("get houses handler", async () => {
       () => undefined,
     );
 
-    if (result) {
-      expect(result!.statusCode).toBe(200);
-      expect(result!.body).toBe(
-        '{"houses":[{"houseId":"house#clhqcayfg000008mb78ug1z0t"}]}',
-      );
-      expect(result!.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result!.isBase64Encoded).toBe(false);
-    }
+    expect(result!.statusCode).toBe(200);
+    expect(result!.body).toBe(
+      '{"houses":[{"houseId":"house#clhqcayfg000008mb78ug1z0t"}]}',
+    );
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
   });
 
   it("handles not houses found", async () => {
-    expect.assertions(4);
     ddbMock
       .on(QueryCommand, {
         TableName: "INVALID_TABLE",
@@ -115,18 +108,15 @@ describe("get houses handler", async () => {
 
     const result = await handler(getEvent(), mockedContext, () => undefined);
 
-    if (result) {
-      expect(result!.statusCode).toBe(404);
-      expect(result!.body).toBe('{"message":"NO_HOUSES"}');
-      expect(result!.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result!.isBase64Encoded).toBe(false);
-    }
+    expect(result!.statusCode).toBe(404);
+    expect(result!.body).toBe('{"message":"NO_HOUSES"}');
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
   });
 
   it("returns error on empty body", async () => {
-    expect.assertions(4);
     const event = getEvent();
     ddbMock
       .on(QueryCommand, {
@@ -152,18 +142,15 @@ describe("get houses handler", async () => {
       () => undefined,
     );
 
-    if (result) {
-      expect(result!.statusCode).toBe(500);
-      expect(result!.body).toBe('{"message":"EMPTY_BODY"}');
-      expect(result!.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result!.isBase64Encoded).toBe(false);
-    }
+    expect(result!.statusCode).toBe(500);
+    expect(result!.body).toBe('{"message":"EMPTY_BODY"}');
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
   });
 
   it("handles db errors", async () => {
-    expect.assertions(6);
     ddbMock
       .on(QueryCommand, {
         TableName: "houses",
@@ -175,17 +162,15 @@ describe("get houses handler", async () => {
       .rejects("Something wrong happened");
     const result = await handler(getEvent(), mockedContext, () => undefined);
 
-    if (result) {
-      expect(result!.statusCode).toBe(404);
-      expect(result!.body).toBe('{"message":"NO_HOUSES"}');
-      expect(result!.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result!.isBase64Encoded).toBe(false);
-      expect(consoleSpy).toHaveBeenCalledOnce();
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Unexpected error while getting the houses, Error: Something wrong happened",
-      );
-    }
+    expect(result!.statusCode).toBe(404);
+    expect(result!.body).toBe('{"message":"NO_HOUSES"}');
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
+    expect(consoleSpy).toHaveBeenCalledOnce();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "Unexpected error while getting the houses, Error: Something wrong happened",
+    );
   });
 });

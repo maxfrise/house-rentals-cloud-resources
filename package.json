@@ -46,6 +46,9 @@
     "*.ts": [
       "eslint",
       "prettier --write --ignore-unknown"
+    ],
+    "*.md": [
+      "prettier --write"
     ]
   }
 }

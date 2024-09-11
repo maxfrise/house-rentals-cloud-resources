@@ -37,7 +37,6 @@ describe("createHouse handler", () => {
   });
 
   it("creates a house", async () => {
-    expect.assertions(4);
     ddbMock
       .on(PutCommand, {
         TableName: "houses",
@@ -53,18 +52,15 @@ describe("createHouse handler", () => {
 
     const result = await handler(getEvent(), mockedContext, () => undefined);
 
-    if (result) {
-      expect(result.statusCode).toBe(200);
-      expect(result.body).toBe('{"message":"OK"}');
-      expect(result.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result.isBase64Encoded).toBe(false);
-    }
+    expect(result!.statusCode).toBe(200);
+    expect(result!.body).toBe('{"message":"OK"}');
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
   });
 
   it("creates a house in prod table", async () => {
-    expect.assertions(4);
     ddbMock
       .on(PutCommand, {
         TableName: "houses-prod",
@@ -90,18 +86,15 @@ describe("createHouse handler", () => {
       () => undefined,
     );
 
-    if (result) {
-      expect(result.statusCode).toBe(200);
-      expect(result.body).toBe('{"message":"OK"}');
-      expect(result.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result.isBase64Encoded).toBe(false);
-    }
+    expect(result!.statusCode).toBe(200);
+    expect(result!.body).toBe('{"message":"OK"}');
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
   });
 
   it("returns error on empty body", async () => {
-    expect.assertions(4);
     const event = getEvent();
     const result = await handler(
       {
@@ -112,18 +105,15 @@ describe("createHouse handler", () => {
       () => undefined,
     );
 
-    if (result) {
-      expect(result.statusCode).toBe(500);
-      expect(result.body).toBe('{"message":"EMPTY_BODY"}');
-      expect(result.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result.isBase64Encoded).toBe(false);
-    }
+    expect(result!.statusCode).toBe(500);
+    expect(result!.body).toBe('{"message":"EMPTY_BODY"}');
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
   });
 
   it("handles db errors", async () => {
-    expect.assertions(4);
     ddbMock
       .on(PutCommand, {
         TableName: "houses",
@@ -131,13 +121,11 @@ describe("createHouse handler", () => {
       .rejects("Something wrong happened");
     const result = await handler(getEvent(), mockedContext, () => undefined);
 
-    if (result) {
-      expect(result.statusCode).toBe(500);
-      expect(result.body).toBe('{"message":"HOUSE_NOT_CREATED"}');
-      expect(result.headers).toMatchObject({
-        "Content-Type": "application/json",
-      });
-      expect(result.isBase64Encoded).toBe(false);
-    }
+    expect(result!.statusCode).toBe(500);
+    expect(result!.body).toBe('{"message":"HOUSE_NOT_CREATED"}');
+    expect(result!.headers).toMatchObject({
+      "Content-Type": "application/json",
+    });
+    expect(result!.isBase64Encoded).toBe(false);
   });
 });
