@@ -1,11 +1,10 @@
 
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { PutCommand } from '@aws-sdk/lib-dynamodb';
-import { marshall } from "@aws-sdk/util-dynamodb";
 
-import { Body } from "./types"
+import { House } from "../../common/types"
 
-export const createHouse = async (body: Body, tableName: string, client: DynamoDBClient) => {
+export const createHouse = async (body: House, tableName: string, client: DynamoDBClient) => {
   const putItemCommand = new PutCommand({
     TableName: tableName,
     Item: {

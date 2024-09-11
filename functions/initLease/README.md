@@ -1,4 +1,4 @@
-# createLease
+# initLease
 
 Function in charge of initializing a lease.
 

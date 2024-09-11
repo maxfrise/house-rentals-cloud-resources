@@ -88,7 +88,7 @@ describe("createHouse handler", () => {
 
   })
 
-  it('returns error en empty body', async () => {
+  it('returns error on empty body', async () => {
     expect.assertions(4);
     const event = getEvent()
     const result = await handler({
@@ -109,7 +109,6 @@ describe("createHouse handler", () => {
     ddbMock.on(PutCommand, {
       TableName: 'houses',
     }).rejects("Something wrong happened")
-    const event = getEvent()
     const result = await handler(getEvent(), mockedContext, () => undefined)
 
     if (result) {

@@ -1,11 +1,9 @@
 import { APIGatewayEvent, Handler } from 'aws-lambda';
 import { StatusCodes, ApiResponse, getEnv } from '../../common';
-import { Responsebody } from "./types"
-import { House } from "../../common/types"
+import { Responsebody, Body } from "./types"
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-
-import { createHouse } from './createHouse';
+import { getHouses } from './getHouses';
 
 const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
@@ -18,11 +16,15 @@ export const handler: Handler<APIGatewayEvent, ApiResponse<Responsebody>> = asyn
     return new ApiResponse(StatusCodes.error, { message: "EMPTY_BODY" })
   }
 
-  const body = JSON.parse(event.body) as House
-  const result = await createHouse(body, tableName, ddb)
+  const body = JSON.parse(event.body) as Body
 
-  const status = result ? StatusCodes.ok : StatusCodes.error;
-  const message = result ? "OK" : "HOUSE_NOT_CREATED";
+  const result = await getHouses(body, tableName, ddb)
 
-  return new ApiResponse(status, { message })
+  if (!result) {
+    return new ApiResponse(StatusCodes.notFound, { message: "NO_HOUSES" })
+  }
+
+  const houses = result.Items?.map((item) => item)
+
+  return new ApiResponse(StatusCodes.ok, { houses })
 };

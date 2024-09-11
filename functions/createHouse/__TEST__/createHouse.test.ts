@@ -10,7 +10,6 @@ const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
 const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => { });
 
-
 const body = {
   "landlord": "email#audel91@gmail.com",
   "houseId": "4567",
