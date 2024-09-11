@@ -1,2 +1,2 @@
-export * from './default-response';
-export * from './api-response';
+export * from "./default-response";
+export * from "./api-response";

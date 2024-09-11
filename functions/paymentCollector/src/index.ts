@@ -1,68 +1,91 @@
-import { APIGatewayEvent, Handler } from 'aws-lambda';
+import { APIGatewayEvent, Handler } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import { StatusCodes, ApiResponse, getEnv, Stage, MaxfriseErrorCodes } from '../../common';
+import {
+  DynamoDBDocumentClient,
+  QueryCommand,
+  UpdateCommand,
+} from "@aws-sdk/lib-dynamodb";
+import {
+  StatusCodes,
+  ApiResponse,
+  getEnv,
+  Stage,
+  MaxfriseErrorCodes,
+} from "../../common";
 import type { PaymentCollectorRequest, Responsebody } from "./event";
 
 const client = new DynamoDBClient({ region: "us-west-2" });
 const ddb = DynamoDBDocumentClient.from(client);
 
-export const handler: Handler<APIGatewayEvent, ApiResponse<PaymentCollectorRequest>> = async (event) => {
-  if (!event.body) return new ApiResponse<Responsebody>(StatusCodes.badRequest, { message: MaxfriseErrorCodes.missingInfo.message })
-  const body = JSON.parse(event.body) as PaymentCollectorRequest
-  const environment = getEnv(event.requestContext.stage)
-  const tableName = environment === Stage.PROD ? "paymentJobs-prod" : "paymentJobs"
+export const handler: Handler<
+  APIGatewayEvent,
+  ApiResponse<PaymentCollectorRequest>
+> = async (event) => {
+  if (!event.body)
+    return new ApiResponse<Responsebody>(StatusCodes.badRequest, {
+      message: MaxfriseErrorCodes.missingInfo.message,
+    });
+  const body = JSON.parse(event.body) as PaymentCollectorRequest;
+  const environment = getEnv(event.requestContext.stage);
+  const tableName =
+    environment === Stage.PROD ? "paymentJobs-prod" : "paymentJobs";
 
-  if (!await paymentExist(body.pk, body.sk, tableName)) {
-    return new ApiResponse<Responsebody>(StatusCodes.notFound, { message: 'payment not found' })
+  if (!(await paymentExist(body.pk, body.sk, tableName))) {
+    return new ApiResponse<Responsebody>(StatusCodes.notFound, {
+      message: "payment not found",
+    });
   }
 
   const input = {
-    "ExpressionAttributeNames": {
+    ExpressionAttributeNames: {
       "#S": "status",
-      "#DT": "details"
+      "#DT": "details",
     },
-    "ExpressionAttributeValues": {
+    ExpressionAttributeValues: {
       ":s": "PAID",
-      ":dt": body.details
+      ":dt": body.details,
     },
-    "Key": {
-      "pk": body.pk,
-      "st": body.sk
+    Key: {
+      pk: body.pk,
+      st: body.sk,
     },
-    "ReturnValues": "ALL_NEW",
-    "TableName": tableName,
-    "UpdateExpression": "SET #S = :s, #DT = :dt"
+    ReturnValues: "ALL_NEW",
+    TableName: tableName,
+    UpdateExpression: "SET #S = :s, #DT = :dt",
   };
 
   const command = new UpdateCommand(input);
 
   try {
-    await ddb.send(command)
+    await ddb.send(command);
   } catch (error) {
-    return new ApiResponse<Responsebody>(StatusCodes.error, { message: (error as Error).message })
+    return new ApiResponse<Responsebody>(StatusCodes.error, {
+      message: (error as Error).message,
+    });
   }
 
-  return new ApiResponse<Responsebody>(StatusCodes.ok, { message: "Rent collected successfully" })
+  return new ApiResponse<Responsebody>(StatusCodes.ok, {
+    message: "Rent collected successfully",
+  });
 };
 
 async function paymentExist(pk: string, sk: string, tableName: string) {
-  let exist = false
+  let exist = false;
   const input = {
-    "ExpressionAttributeValues": {
+    ExpressionAttributeValues: {
       ":pk": pk,
-      ":sk": sk
+      ":sk": sk,
     },
-    "KeyConditionExpression": "pk = :pk AND st = :sk",
-    "TableName": tableName
+    KeyConditionExpression: "pk = :pk AND st = :sk",
+    TableName: tableName,
   };
 
   try {
-    const response = await ddb.send(new QueryCommand(input))
-    exist = response.Items!.length > 0
+    const response = await ddb.send(new QueryCommand(input));
+    exist = response.Items!.length > 0;
   } catch (e) {
-    console.log("Error querying the db")
+    console.log(`Error querying the db: error: ${e}`);
   }
 
-  return exist
+  return exist;
 }

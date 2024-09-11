@@ -1,3 +1,1 @@
-export default [
-  'modules/**'
-]
+export default ["modules/**"];

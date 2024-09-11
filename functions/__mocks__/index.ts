@@ -1,2 +1,2 @@
-export * from './mocked-context';
-export * from './mocked-event';
+export * from "./mocked-context";
+export * from "./mocked-event";

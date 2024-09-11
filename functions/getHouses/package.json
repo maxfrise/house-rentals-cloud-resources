@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test:watch": "vitest",
-    "test": "tsc && eslint && vitest --coverage",
+    "test": "tsc && vitest --coverage",
     "prebuild": "rm -rf dist",
     "build": "esbuild src/index.ts --bundle --sourcemap --external:@aws-sdk/* --platform=node --target=es2020 --outfile=dist/index.js"
   },

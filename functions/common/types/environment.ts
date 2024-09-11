@@ -1,4 +1,4 @@
 export enum Stage {
-  TEST = 'test',
-  PROD = 'prod'
+  TEST = "test",
+  PROD = "prod",
 }
