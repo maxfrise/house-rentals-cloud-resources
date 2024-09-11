@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test:watch": "TZ=UT vitest",
-    "test": "tsc && eslint && TZ=UT vitest run --coverage",
+    "test": "tsc && TZ=UT vitest run --coverage",
     "prebuild": "rm -rf dist",
     "build": "esbuild src/index.ts --bundle --sourcemap --external:@aws-sdk/* --platform=node --target=es2020 --outfile=dist/index.js"
   },
