@@ -1,6 +1,6 @@
 # getHouses
 
-Function in charge of creating house
+Function in charge of getting houses
 
 ### Pre migration Api gateway:
 https://us-west-2.console.aws.amazon.com/apigateway/main/apis/6vvo3wbd31/resources?api=6vvo3wbd31&region=us-west-2
