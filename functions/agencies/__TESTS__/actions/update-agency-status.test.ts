@@ -104,8 +104,8 @@ describe("updateAgencyStatus()", () => {
     it("Should return status 400 if ownerId is not provided", async () => {
       const bodyRequest = { ...mockedBodyRequest, ownerId: undefined };
 
-      // @ts-expect-error idk
       const response = (await updateAgencyStatus(
+        // @ts-expect-error idk
         bodyRequest,
         Stage.TEST,
       )) as Response;
