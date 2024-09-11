@@ -1,6 +1,6 @@
 interface Person {
   name: string;
-  phone: string
+  phone: string;
 }
 
 export interface House {
@@ -9,7 +9,7 @@ export interface House {
   houseFriendlyName: string;
   address: string;
   details: string;
-  landlords: Person[],
-  leaseStatus: string
-  tenants: Person[]
+  landlords: Person[];
+  leaseStatus: string;
+  tenants: Person[];
 }

@@ -1,9 +1,9 @@
 export type PaymentCollectorRequest = {
-  pk: string
-  sk: string
-  details: string
-}
+  pk: string;
+  sk: string;
+  details: string;
+};
 
 export type Responsebody = {
-  message: string
-}
+  message: string;
+};

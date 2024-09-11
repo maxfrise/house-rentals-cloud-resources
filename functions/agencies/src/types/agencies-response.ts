@@ -1,4 +1,3 @@
-
 export type AgenciesFailure = {
   errorMessage: string;
 };
