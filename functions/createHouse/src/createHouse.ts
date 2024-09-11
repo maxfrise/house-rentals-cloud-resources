@@ -1,7 +1,6 @@
 
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { PutCommand } from '@aws-sdk/lib-dynamodb';
-import { marshall } from "@aws-sdk/util-dynamodb";
 
 import { Body } from "./types"
 
