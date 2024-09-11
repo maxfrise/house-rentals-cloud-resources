@@ -19,7 +19,6 @@ describe("getHouses", () => {
   });
 
   it("should get the houses by user", async () => {
-    expect.assertions(2);
     ddbMock
       .on(QueryCommand, {
         TableName: "houses",
@@ -38,11 +37,7 @@ describe("getHouses", () => {
 
     const result = await getHouses(body, "houses", ddb);
 
-    if (result) {
-      expect(result?.Items?.length).toBe(1);
-      expect(result?.Items?.[0].houseId).toBe(
-        "house#clhqcayfg000008mb78ug1z0t",
-      );
-    }
+    expect(result?.Items?.length).toBe(1);
+    expect(result?.Items?.[0].houseId).toBe("house#clhqcayfg000008mb78ug1z0t");
   });
 });
