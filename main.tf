@@ -143,7 +143,7 @@ module "api_lambdas" {
   })
 
   source               = "./terraform/lambdas/api"
-  function_name        = each.key
+  function_name        = "${each.key}_TF"
   function_description = each.value
   source_file          = "./functions/${each.key}/dist/index.js"
   lambda_output_path   = "./functions/${each.key}/dist/lambda.zip"
