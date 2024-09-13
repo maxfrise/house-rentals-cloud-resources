@@ -18,6 +18,10 @@ export const handler: Handler<
   const paymentJobsTableName =
     environment === "prod" ? "paymentJobs-prod" : "paymentJobs";
 
+  if (!event.body) {
+    return new ApiResponse(StatusCodes.error, { message: "EMPTY_BODY" });
+  }
+
   const body = JSON.parse(event.body) as Body;
 
   const house = await getHouse(body.user, body.houseid, houseTableName, ddb);
