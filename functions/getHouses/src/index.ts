@@ -12,6 +12,7 @@ export const handler: Handler<
   APIGatewayEvent,
   ApiResponse<Responsebody>
 > = async (event) => {
+  // Test change in one lambda
   const environment = getEnv(event.requestContext.stage);
   const tableName = environment === "prod" ? "houses-prod" : "houses";
 
