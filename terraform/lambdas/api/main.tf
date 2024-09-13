@@ -7,8 +7,8 @@ data "archive_file" "source_code" {
 resource "aws_s3_object" "source_s3_bucket" {
   bucket = var.bucket
   key    = var.bucketKey
-  source = data.archive_file.agencies_source.output_path
-  etag = data.archive_file.agencies_source.output_md5
+  source = data.archive_file.source_code.output_path
+  etag = data.archive_file.source_code.output_md5
 }
 
 resource "aws_lambda_function" "lambda_function" {
@@ -18,7 +18,7 @@ resource "aws_lambda_function" "lambda_function" {
   s3_key           = aws_s3_object.source_s3_bucket.key
   runtime          = "nodejs18.x"
   role             = var.iam_arn
-  source_code_hash = data.archive_file.agencies_source.output_base64sha256
+  source_code_hash = data.archive_file.source_code.output_base64sha256
   handler          = "index.handler"
   architectures    = ["arm64"]
   timeout          = 900

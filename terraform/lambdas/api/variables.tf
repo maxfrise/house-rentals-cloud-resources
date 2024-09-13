@@ -14,12 +14,12 @@ variable "source_file" {
 }
 
 variable "lambda_output_path" {
-  description = "The path of where the zip will be added"
+  description = "The path where the zip will be added"
   type        = string
 }
 
 variable "s3_suffix" {
-  description = "Sufix of the bucket where the code is deployed"
+  description = "Suffix of the bucket where the code is deployed"
   type        = string
 }
 
