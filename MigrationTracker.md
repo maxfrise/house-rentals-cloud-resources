@@ -20,11 +20,11 @@ Another key advantage of adopting Infrastructure as Code (IaC) is that any infra
 - paymentCollector
 - createHouse
 - getHouses
+- houseOverview
 
 # Missing lambdas
 
 - createLease // This seems to not be un use by the UI, will not migrate it
-- houseOverview
 
 # Api gateway resource - lambda maping
 
