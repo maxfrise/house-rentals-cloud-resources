@@ -147,7 +147,6 @@ module "api_lambdas" {
   function_description = each.value
   source_file          = "./functions/${each.key}/dist/index.js"
   lambda_output_path   = "./functions/${each.key}/dist/lambda.zip"
-  s3_suffix            = "${each.key}_lambda"
   bucket               = "maxfrisedeployables"
   bucketKey            = "${each.key}_lambda.zip"
   iam_arn              = module.iam_maxfrise_lambdas.arn
