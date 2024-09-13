@@ -132,3 +132,22 @@ module "maxfrise_user_pool" {
     Terraform   = true
   }
 }
+
+module "api_lambdas" {
+  for_each = tomap({
+    initLease        = "function to init the lease",
+    paymentCollector = "function to collect payments",
+    createHouse      = "function to create houses",
+    getHouses        = "function to get houses",
+    houseOverview    = "function to get the house overview"
+  })
+
+  source               = "./terraform/lambdas/api"
+  function_name        = "${each.key}_TF"
+  function_description = each.value
+  source_file          = "./functions/${each.key}/dist/index.js"
+  lambda_output_path   = "./functions/${each.key}/dist/lambda.zip"
+  bucket               = "maxfrisedeployables"
+  bucketKey            = "${each.key}_lambda.zip"
+  iam_arn              = module.iam_maxfrise_lambdas.arn
+}
