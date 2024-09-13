@@ -88,8 +88,7 @@ describe("get house overview handler", () => {
       })
       .resolves({
         Items: [houseDatails],
-      });
-    ddbMock
+      })
       .on(QueryCommand, {
         TableName: "paymentJobs",
         ExpressionAttributeValues: {
@@ -132,8 +131,7 @@ describe("get house overview handler", () => {
       })
       .resolves({
         Items: [houseDatails],
-      });
-    ddbMock
+      })
       .on(QueryCommand, {
         TableName: "paymentJobs-prod",
         ExpressionAttributeValues: {
@@ -186,8 +184,7 @@ describe("get house overview handler", () => {
       })
       .resolves({
         Items: [houseDatails],
-      });
-    ddbMock
+      })
       .on(QueryCommand, {
         TableName: "paymentJobs",
         ExpressionAttributeValues: {
