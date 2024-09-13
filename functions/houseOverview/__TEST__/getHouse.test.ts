@@ -55,6 +55,7 @@ describe("getHouse", () => {
       .resolves({
         Items: [houseDatails],
       });
+
     const house = await getHouse("audel91", "123", "house-overview", ddb);
 
     expect(house).toMatchObject(houseDatails.house);
@@ -76,6 +77,7 @@ describe("getHouse", () => {
       .resolves({
         Items: [],
       });
+
     const house = await getHouse("audel91", "123", "house-overview", ddb);
 
     expect(house).toBeUndefined();
