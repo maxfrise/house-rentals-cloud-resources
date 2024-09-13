@@ -109,7 +109,7 @@ describe("get houses handler", async () => {
     const result = await handler(getEvent(), mockedContext, () => undefined);
 
     expect(result!.statusCode).toBe(404);
-    expect(result!.body).toBe('{"message":"NO_HOUSES"}');
+    expect(result!.body).toBe('{"message":"NO_HOUSES_FOUND"}');
     expect(result!.headers).toMatchObject({
       "Content-Type": "application/json",
     });
@@ -163,7 +163,7 @@ describe("get houses handler", async () => {
     const result = await handler(getEvent(), mockedContext, () => undefined);
 
     expect(result!.statusCode).toBe(404);
-    expect(result!.body).toBe('{"message":"NO_HOUSES"}');
+    expect(result!.body).toBe('{"message":"NO_HOUSES_FOUND"}');
     expect(result!.headers).toMatchObject({
       "Content-Type": "application/json",
     });

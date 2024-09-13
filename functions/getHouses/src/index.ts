@@ -24,7 +24,9 @@ export const handler: Handler<
   const result = await getHouses(body, tableName, ddb);
 
   if (!result) {
-    return new ApiResponse(StatusCodes.notFound, { message: "NO_HOUSES" });
+    return new ApiResponse(StatusCodes.notFound, {
+      message: "NO_HOUSES_FOUND",
+    });
   }
 
   const houses = result.Items?.map((item) => item);
