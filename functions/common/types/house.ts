@@ -1,4 +1,4 @@
-interface Person {
+export interface Person {
   name: string;
   phone: string;
 }
@@ -12,4 +12,11 @@ export interface House {
   landlords: Person[];
   leaseStatus: string;
   tenants: Person[];
+}
+
+export enum PaymentStatus {
+  PAID,
+  DUE,
+  PAST_DUE,
+  NOT_DUE,
 }
