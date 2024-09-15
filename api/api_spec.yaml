@@ -1,6 +1,6 @@
 openapi: "3.0.1"
 info:
-  title: "My API"
+  title: "Maxfrise API v2"
   version: "1.0"
 paths:
   /initLease:
