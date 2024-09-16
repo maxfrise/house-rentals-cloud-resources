@@ -10,7 +10,7 @@ paths:
         '200':
           description: "Successful response"
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/{initLeaseLambdaArn}/invocations"
+        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/${initLeaseLambdaArn}/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
@@ -21,7 +21,7 @@ paths:
         '200':
           description: "Successful response"
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/{paymentCollectorLambdaArn}/invocations"
+        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/${paymentCollectorLambdaArn}/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
@@ -32,7 +32,7 @@ paths:
         '200':
           description: "Successful response"
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/{createHouseLambdaArn}/invocations"
+        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/${createHouseLambdaArn}/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
@@ -43,7 +43,7 @@ paths:
         '200':
           description: "Successful response"
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/{getHousesLambdaArn}/invocations"
+        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/${getHousesLambdaArn}/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
@@ -54,7 +54,7 @@ paths:
         '200':
           description: "Successful response"
       x-amazon-apigateway-integration:
-        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/{houseOverviewLambdaArn}/invocations"
+        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/${houseOverviewLambdaArn}/invocations"
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
