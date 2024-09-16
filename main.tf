@@ -169,4 +169,8 @@ resource "aws_api_gateway_rest_api" "api_v2" {
   name = "MaxfriseApiV2"
 
   body = data.template_file.maxfrise_api_v2_spec.rendered
+
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 }
