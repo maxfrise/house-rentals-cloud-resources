@@ -24,7 +24,7 @@ resource "aws_lambda_function" "lambda_function" {
   timeout          = 900
 }
 
-resource "aws_lambda_permission" "lambda_api_gateway_permissons" {
+resource "aws_lambda_permission" "lambda_api_gateway_permissions" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = var.function_name
