@@ -1,6 +1,6 @@
 import { APIGatewayEvent, Handler } from "aws-lambda";
 import { StatusCodes, ApiResponse, getEnv } from "../../common";
-import { Responsebody, Body } from "./types";
+import { Responsebody } from "./types";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { getHouses } from "./getHouses";
@@ -14,14 +14,13 @@ export const handler: Handler<
 > = async (event) => {
   const environment = getEnv(event.requestContext.stage);
   const tableName = environment === "prod" ? "houses-prod" : "houses";
+  const landlord = event.queryStringParameters?.landlord;
 
-  if (!event.body) {
-    return new ApiResponse(StatusCodes.error, { message: "EMPTY_BODY" });
+  if (!landlord) {
+    return new ApiResponse(StatusCodes.badRequest, { message: "EMPTY_VALUE" });
   }
 
-  const body = JSON.parse(event.body) as Body;
-
-  const result = await getHouses(body, tableName, ddb);
+  const result = await getHouses(landlord, tableName, ddb);
 
   if (!result) {
     return new ApiResponse(StatusCodes.notFound, { message: "NO_HOUSES" });

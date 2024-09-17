@@ -4,7 +4,3 @@ export interface Responsebody {
   houses: House[];
   message: string;
 }
-
-export interface Body {
-  landlord: string;
-}

@@ -6,11 +6,9 @@ import { mockedContext, getMockedEvent } from "../../__mocks__";
 import { Stage } from "../../common";
 
 const getEvent = () =>
-  getMockedEvent(
-    JSON.stringify({
-      landlord: "email#audel91@gmail.com",
-    }),
-  );
+  getMockedEvent(null, Stage.TEST, {
+    landlord: "email#audel91@gmail.com",
+  });
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
@@ -116,8 +114,7 @@ describe("get houses handler", async () => {
     expect(result!.isBase64Encoded).toBe(false);
   });
 
-  it("returns error on empty body", async () => {
-    const event = getEvent();
+  it("returns error on empty query param", async () => {
     ddbMock
       .on(QueryCommand, {
         TableName: "INVALID_TABLE",
@@ -134,16 +131,13 @@ describe("get houses handler", async () => {
         ],
       });
     const result = await handler(
-      {
-        ...event,
-        body: null,
-      },
+      getMockedEvent(),
       mockedContext,
       () => undefined,
     );
 
-    expect(result!.statusCode).toBe(500);
-    expect(result!.body).toBe('{"message":"EMPTY_BODY"}');
+    expect(result!.statusCode).toBe(400);
+    expect(result!.body).toBe('{"message":"EMPTY_VALUE"}');
     expect(result!.headers).toMatchObject({
       "Content-Type": "application/json",
     });
