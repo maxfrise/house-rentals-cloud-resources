@@ -150,6 +150,8 @@ module "api_lambdas" {
   bucket               = "maxfrisedeployables"
   bucketKey            = "${each.key}_lambda.zip"
   iam_arn              = module.iam_maxfrise_lambdas.arn
+
+  api_gateway_execution_arn = module.maxfrise_api_v2.api_gateway_execution_arn
 }
 
 module "maxfrise_api_v2" {
