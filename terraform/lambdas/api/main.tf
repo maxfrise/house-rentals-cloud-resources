@@ -8,7 +8,7 @@ resource "aws_s3_object" "source_s3_bucket" {
   bucket = var.bucket
   key    = var.bucketKey
   source = data.archive_file.source_code.output_path
-  etag = data.archive_file.source_code.output_md5
+  etag   = data.archive_file.source_code.output_md5
 }
 
 resource "aws_lambda_function" "lambda_function" {
@@ -30,5 +30,5 @@ resource "aws_lambda_permission" "lambda_api_gateway_permissions" {
   function_name = var.function_name
   principal     = "apigateway.amazonaws.com"
 
-  source_arn = var.api_gateway_execution_arn
+  source_arn = "${var.api_gateway_execution_arn}/*"
 }
