@@ -2,8 +2,9 @@ import { APIGatewayEvent } from "aws-lambda";
 import { Stage } from "../common";
 
 export const getMockedEvent = (
-  body: string,
+  body: string | null = null,
   stage = Stage.TEST,
+  queryStringParameters = {},
 ): APIGatewayEvent => {
   return {
     resource: "/",
@@ -11,7 +12,7 @@ export const getMockedEvent = (
     httpMethod: "POST",
     headers: {},
     multiValueHeaders: {},
-    queryStringParameters: null,
+    queryStringParameters,
     multiValueQueryStringParameters: null,
     pathParameters: null,
     stageVariables: {},

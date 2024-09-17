@@ -1,10 +1,8 @@
 import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
-import { Body } from "./types";
-
 export const getHouses = async (
-  body: Body,
+  landlord: string,
   tableName: string,
   client: DynamoDBClient,
 ) => {
@@ -15,7 +13,7 @@ export const getHouses = async (
       "#hk": "landlord",
     },
     ExpressionAttributeValues: {
-      ":landlord": body.landlord,
+      ":landlord": landlord,
     },
   });
 
