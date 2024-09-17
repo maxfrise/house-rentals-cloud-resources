@@ -23,3 +23,12 @@ resource "aws_lambda_function" "lambda_function" {
   architectures    = ["arm64"]
   timeout          = 900
 }
+
+resource "aws_lambda_permission" "lambda_api_gateway_permissions" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = var.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = var.api_gateway_execution_arn
+}

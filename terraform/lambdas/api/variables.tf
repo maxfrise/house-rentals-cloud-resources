@@ -32,3 +32,8 @@ variable "iam_arn" {
   description = "The iam arn role for lambdas"
   type        = string
 }
+
+variable "api_gateway_execution_arn" {
+  description = "The arn of the api gateway that will execute the lambdas"
+  type        = string
+}

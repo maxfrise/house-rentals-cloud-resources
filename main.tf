@@ -150,27 +150,16 @@ module "api_lambdas" {
   bucket               = "maxfrisedeployables"
   bucketKey            = "${each.key}_lambda.zip"
   iam_arn              = module.iam_maxfrise_lambdas.arn
+
+  api_gateway_execution_arn = module.maxfrise_api_v2.api_gateway_execution_arn
 }
 
-data "template_file" "maxfrise_api_v2_spec" {
-  template = file("./api/api_spec.yaml")
+module "maxfrise_api_v2" {
+  source = "./api"
 
-  vars = {
-    region                    = "us-west--2"
-    initLeaseLambdaArn        = module.api_lambdas["initLease"].lambda_function_arn
-    paymentCollectorLambdaArn = module.api_lambdas["paymentCollector"].lambda_function_arn
-    createHouseLambdaArn      = module.api_lambdas["createHouse"].lambda_function_arn
-    getHousesLambdaArn        = module.api_lambdas["getHouses"].lambda_function_arn
-    houseOverviewLambdaArn    = module.api_lambdas["houseOverview"].lambda_function_arn
-  }
-}
-
-resource "aws_api_gateway_rest_api" "api_v2" {
-  name = "MaxfriseApiV2"
-
-  body = data.template_file.maxfrise_api_v2_spec.rendered
-
-  endpoint_configuration {
-    types = ["REGIONAL"]
-  }
+  initLeaseLambdaArn        = module.api_lambdas["initLease"].lambda_function_arn
+  paymentCollectorLambdaArn = module.api_lambdas["paymentCollector"].lambda_function_arn
+  createHouseLambdaArn      = module.api_lambdas["createHouse"].lambda_function_arn
+  getHousesLambdaArn        = module.api_lambdas["getHouses"].lambda_function_arn
+  houseOverviewLambdaArn    = module.api_lambdas["houseOverview"].lambda_function_arn
 }
