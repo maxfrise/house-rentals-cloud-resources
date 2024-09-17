@@ -157,8 +157,6 @@ module "api_lambdas" {
 module "maxfrise_api_v2" {
   source = "./api"
 
-  open_api_body = data.template_file.maxfrise_api_v2_spec.rendered
-
   initLeaseLambdaArn        = module.api_lambdas["initLease"].lambda_function_arn
   paymentCollectorLambdaArn = module.api_lambdas["paymentCollector"].lambda_function_arn
   createHouseLambdaArn      = module.api_lambdas["createHouse"].lambda_function_arn
