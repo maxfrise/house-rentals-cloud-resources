@@ -1,6 +1,6 @@
 
 data "template_file" "maxfrise_api_v2_spec" {
-  template = file("api_spec.yaml")
+  template = file("${path.module}/api_spec.yaml")
 
   vars = {
     region                    = "us-west--2"
