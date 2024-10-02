@@ -3,7 +3,7 @@ resource "aws_api_gateway_stage" "test_stage" {
   deployment_id = aws_api_gateway_deployment.test_deployment.id
   stage_name   = "test"
 
-  description = "Maxfrise api stage connected to development resources"
+  description = "Maxfrise api stage connected to test resources"
 
   variables = {
     "environment" = "test"
