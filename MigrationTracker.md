@@ -37,14 +37,14 @@ POST*/initlease -> initLease
 
 # Next steps
 
-As of today the migration is partially complete, the endpoints are create and connected with the lambdas that will execute the bussines logic associated to each one.
+As of today the migration is partially complete, the endpoints are created and connected with the lambdas that will execute the business logic associated to each one.
 
 Next steps are related to
 
-- Create the states for test and prod.
-- Making the api avaible in production.
-- Wiring the endpoints with the api
+- Create the stages for test and prod.
+- Create the deployments of the api for test and prod.
+- Register de subdomain with the api, apiv2.maxfrise.com
 
 # Deployment strategy
 
-The deployment is configured in a way that any new change added to the open api spec of the apigatway will trigger a new depoyment to both statges.
+The deployments are configured in a way that any new change added to the open api spec of the api gateway will trigger a new deployment to both stages.
