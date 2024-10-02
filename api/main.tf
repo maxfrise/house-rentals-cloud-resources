@@ -25,18 +25,24 @@ resource "aws_api_gateway_rest_api" "api_v2" {
 
 resource "aws_api_gateway_deployment" "test_deployment" {
   rest_api_id = aws_api_gateway_rest_api.api_v2.id
-  stage_name  = "test"
 
-  depends_on = [
-    aws_api_gateway_rest_api.api_v2
-  ]
+  triggers = {
+    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.api_v2.body))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_api_gateway_deployment" "prod_deployment" {
   rest_api_id = aws_api_gateway_rest_api.api_v2.id
-  stage_name  = "prod"
 
-  depends_on = [
-    aws_api_gateway_rest_api.api_v2
-  ]
+  triggers = {
+    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.api_v2.body))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
