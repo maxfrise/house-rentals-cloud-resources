@@ -34,3 +34,17 @@ POST*/createlease -> createLease
 GET*/gethouses -> getHouses
 GET*/houseoverview -> houseOverview
 POST*/initlease -> initLease
+
+# Next steps
+
+As of today the migration is partially complete, the endpoints are created and connected with the lambdas that will execute the business logic associated to each one.
+
+Next steps are related to
+
+- Create the stages for test and prod.
+- Create the deployments of the api for test and prod.
+- Register de subdomain with the api, apiv2.maxfrise.com
+
+# Deployment strategy
+
+The deployments are configured in a way that any new change added to the open api spec of the api gateway will trigger a new deployment to both stages.
