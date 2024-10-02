@@ -3,7 +3,7 @@ info:
   title: "Maxfrise API v2"
   version: "1.0"
 paths:
-  /initLease:
+  /initlease:
     post:
       summary: "Service to initialize the lease"
       responses:
@@ -14,7 +14,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-  /paymentCollector:
+  /collectpayment:
     post:
       summary: "Service to collect payments"
       responses:
@@ -25,7 +25,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-  /createHouse:
+  /createhouse:
     post:
       summary: "Service to create houses"
       responses:
@@ -36,7 +36,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-  /getHouses:
+  /gethouses:
     get:
       summary: "Service to get houses"
       responses:
@@ -47,7 +47,7 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: "POST"
         type: "aws_proxy"
-  /houseOverview:
+  /houseoverview:
     get:
       summary: "Function to get the house overview"
       responses:
