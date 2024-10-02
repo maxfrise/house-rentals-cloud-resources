@@ -34,3 +34,17 @@ POST*/createlease -> createLease
 GET*/gethouses -> getHouses
 GET*/houseoverview -> houseOverview
 POST*/initlease -> initLease
+
+# Next steps
+
+As of today the migration is partially complete, the endpoints are create and connected with the lambdas that will execute the bussines logic associated to each one.
+
+Next steps are related to
+
+- Create the states for test and prod.
+- Making the api avaible in production.
+- Wiring the endpoints with the api
+
+# Deployment strategy
+
+The deployment is configured in a way that any new change added to the open api spec of the apigatway will trigger a new depoyment to both statges.

@@ -13,7 +13,7 @@ https://us-west-2.console.aws.amazon.com/lambda/home?region=us-west-2#/functions
 ### TODOS
 
 - [x] Publish code to AWS
-- [ ] Create infra code for new API gateway
+- [x] Create infra code for new API gateway
 
 ## Sample curl
 
