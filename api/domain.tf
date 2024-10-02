@@ -1,17 +1,14 @@
 data "aws_acm_certificate" "maxfrise" {
   domain = "*.maxfrise.com"
 
-  # Use the most recent certificate
   most_recent = true
 
-  # Ensure the certificate is in the same region as your API Gateway domain
   statuses = ["ISSUED"]
 }
 
 #
 # Staging
 #
-
 resource "aws_api_gateway_domain_name" "staging_v2_domain" {
   domain_name              = "staging.apiv2.maxfrise.com"
   regional_certificate_arn =  data.aws_acm_certificate.maxfrise.arn
@@ -30,7 +27,6 @@ resource "aws_api_gateway_base_path_mapping" "staging_v2_domain" {
 #
 # Production
 #
-
 resource "aws_api_gateway_domain_name" "staging_v2_domain" {
   domain_name              = "apiv2.maxfrise.com"
   regional_certificate_arn = data.aws_acm_certificate.maxfrise.arn
