@@ -103,7 +103,7 @@ module "maxfrise_user_pool" {
   clients = [
     {
       allowed_oauth_flows                  = ["code"]
-      allowed_oauth_flows_user_pool_client = false
+      allowed_oauth_flows_user_pool_client = true
       allowed_oauth_scopes                 = ["email", "profile", "openid"]
       callback_urls                        = ["https://www.maxfrise.com/callback"]
       default_redirect_uri                 = "https://www.maxfrise.com/callback"
