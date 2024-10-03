@@ -2,7 +2,7 @@ resource "aws_cognito_user_pool" "users_pool" {
   name = var.user_pool_name
 
   auto_verified_attributes = ["email"]
-  deletion_protection      = "INACTIVE"
+  deletion_protection      = "ACTIVE"
 
   # Allow users to sign in with their email as an alias in addition to their username
   alias_attributes = ["email"]
