@@ -4,6 +4,9 @@ resource "aws_cognito_user_pool" "users_pool" {
   auto_verified_attributes = ["email"]
   deletion_protection      = "ACTIVE"
 
+  # Allow users to sign in with their email as an alias in addition to their username
+  alias_attributes = ["email"]
+
   account_recovery_setting {
     recovery_mechanism {
       name     = "verified_email"
