@@ -108,7 +108,7 @@ module "maxfrise_user_pool" {
       callback_urls                        = ["https://www.maxfrise.com/callback"]
       default_redirect_uri                 = "https://www.maxfrise.com/callback"
       explicit_auth_flows                  = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH", "ALLOW_ADMIN_USER_PASSWORD_AUTH", "ALLOW_USER_PASSWORD_AUTH"]
-      generate_secret                      = false
+      generate_secret                      = true
       logout_urls                          = []
       name                                 = "maxfrise_web_client"
       read_attributes                      = ["address", "birthdate", "custom:number_of_properties", "name", "phone_number", "phone_number_verified", "picture", "email", "profile", "email_verified", "family_name", "gender", "given_name", "locale", "middle_name", "nickname", "preferred_username", "updated_at", "website", "zoneinfo"]
