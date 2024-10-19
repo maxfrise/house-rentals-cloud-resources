@@ -105,8 +105,8 @@ module "maxfrise_user_pool" {
       allowed_oauth_flows                  = ["code"]
       allowed_oauth_flows_user_pool_client = true
       allowed_oauth_scopes                 = ["email", "profile", "openid"]
-      callback_urls                        = ["https://www.maxfrise.com/callback"]
-      default_redirect_uri                 = "https://www.maxfrise.com/callback"
+      callback_urls                        = ["https://staging.maxfrise.com/callback", "http://localhost:3000/callback"]
+      default_redirect_uri                 = "https://staging.maxfrise.com/callback"
       explicit_auth_flows                  = ["ALLOW_REFRESH_TOKEN_AUTH", "ALLOW_USER_SRP_AUTH", "ALLOW_ADMIN_USER_PASSWORD_AUTH", "ALLOW_USER_PASSWORD_AUTH"]
       generate_secret                      = true
       logout_urls                          = []
